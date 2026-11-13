@@ -1,0 +1,9 @@
+stale evidence removed (T001_BASELINE.json, T001_BASELINE.log)
+offline probe attempts=2 externalRequests=2 blockedRequests=2 passed=true
+baseline rawMatchCount=1 finalMatchCount=1 executionStatus=COMPLETED identityMatch=true
+identity probe nodeIdentity=true wrapperIdentity=false
+second run rawMatchCount=1 finalMatchCount=1 executionStatus=COMPLETED identityMatch=true
+frame identity probe sameTarget=true decoy=false passed=true
+externalRequests=2 blockedRequests=2
+checks uniqueHit=true identityReproducible=true offlineProbePassed=true
+result PASS

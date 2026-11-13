@@ -1,0 +1,59 @@
+# P022 LocatorStress — 最终审查（第 1 轮）
+
+你好。这是 P022 LocatorStress（定位器压力台）的最终审查请求。本项目在你主持的立项对话中完成（立项对话即本对话），规格 v1.0.0 已冻结，S0–S5 全部 PASS，T014 正式冻结已完成。请按工厂终审规则审查并给出 FINAL_VERDICT。
+
+## 一、项目是什么
+
+浏览器自动化定位器确定性 DOM 变异压力实验室。UI 改版前，自动对定位器（CSS / XPath / role）做 8 种确定性 DOM 变异（M01–M08：包裹插入、同级重排、类名变更、重名插入、嵌套 iframe、Shadow DOM、隐藏副本、文本变更），用真实本地 Playwright 执行定位器，判定四态 verdict（STABLE / WRONG_TARGET / AMBIGUOUS / MISSING），给出稳定性分数与最短失败变异序列（有界 BFS ≤6 步），输出本地 Web UI + JSON 导出 + HTML 报告。
+
+- 不是定位器生成器，不做浏览器兼容认证；100% 合成数据，固定 seed；无真网、无真人、无 GPU、无付费 API、无 LLM 调用。
+- 技术栈：TypeScript + Node + Playwright（本地 Chromium）+ 独立 Python Oracle（预埋目标标识，定位器不可见）。
+- 零真人参与（全程合成数据 + 确定性算法 + 独立 Oracle + 自动化断言）。
+
+## 二、各阶段结论（全部由主控 Muse 亲自重跑验收命令验证）
+
+- **S0 = PASS**（2026-11-10 ~17:41 GMT）：24 合成页面 × 8 变异 = 192 单变异用例；baseline 24/24；Oracle parity 192/192（0 不匹配）；稳定控制误报 0/96；脆弱控制检出 96/96；四态 STABLE 138 / WRONG_TARGET 22 / AMBIGUOUS 17 / MISSING 15；100 次重放 1 个唯一 gate hash；外部请求 0。gate_sha256 `651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52`。
+- **S1 = PASS**（~20:25 GMT）：四态 verdict 分类器 + 稳定性评分 + Canonical JSON + 四 SHA-256；test:verdict 37/37、test:score 16/16、test:canonical 36/36、test:hash-contract 11/11；四哈希与冻结值逐字一致。
+- **S2 = PASS**（~22:34 GMT）：有界 BFS 最短失败序列 + witness + Analysis API/JSON；test:bfs 29/29、test:bfs:determinism 4/4、test:witness 13/13、test:api 27/27、test:export:json 9/9。
+- **S3 = PASS**（2026-11-11 ~00:16 GMT）：本地 Web UI + DOM diff + 离线 HTML/JSON 导出 + 安全转义；test:ui 12/12、test:export 11/11、test:html-safety 3/3（7 个 XSS payload，真实 Chromium 离线上下文）。T009 审查曾发现 P0（POST /api/validate 无效 locator 会杀死服务器进程），已修复并聚焦复审 PASS。
+- **S4 = PASS**（~06:07 GMT）：全量单元/属性/Mutation/Oracle Parity + 浏览器 E2E/离线/性能/压力；npm test 509/509；test:coverage lines 70.03%；test:mutation 40/40 = 100%；test:e2e 7/7、test:offline 6/6、test:stress 6/6、test:performance 4/4；Oracle parity 192/192 三方一致。
+- **S5 = PASS**（~10:40 GMT）：T013 独立审查 PASS（P0 0 / P1 0 / P2 25，全部非阻塞）；FIX 轮聚焦复审第一轮 FAIL（P0 0 / P1 2 / P2 2，均在两个新验收脚本）→ 返工后第二轮 PASS（P0 0 / P1 0 / P2 0）；T014 正式冻结 PASS（P0 0 / P1 0 / P2 4，全部非阻塞，见下）。
+
+最终计数（冻结后）：npm test **511/511**（39 文件），coverage lines **70.15%**，mutation 40/40 = 100%，s0:gate GATE PASS（gate_sha256 不变，重放 100/100，1 唯一 hash）。
+
+## 三、冻结产物（T014，commit 3fc5dbb，冻结对象 afcc2d1）
+
+Drive 04_release 文件夹：https://drive.google.com/drive/folders/1WCE3b9pebHg32rTVw4JBREkD_hxAt9Tj
+
+| 文件 | 大小 | SHA-256 |
+|---|---|---|
+| source.zip | 1,278,357 B | 2b355d37f47bca03fe50e5d0c08e91d79e7a87057e633745f9ba9b8dcbdfabfc |
+| dist.zip | 253,503 B | c3f083234be856f4fe6b23d3f1f22d5e286e695e418ae8f9f01713e06ec7d02c |
+| RELEASE_MANIFEST.json | 3,421 B | d4afdc54987519c2fa0ea2eea65d2b5e86cb81c330c83792c7c90184c04c2e38 |
+| SHA256SUMS.txt | 240 B | b1e3ffb0a1b7d6dc090e5c03c05189f7e34c98afdf4d04454d0384b4958ca4cd |
+| T014_FREEZE_REPORT.md | 6,594 B | 29280c185a47f763b93e163c109a2fb8356c36b338d2fd872639732dd04b4cd7 |
+
+独立审查文件（同在 04_release）：
+- T013 独立审查报告 INDEPENDENT_REVIEW.md（24,507 B）：https://drive.google.com/file/d/1sAAHr-v_E3yIg8vd0oAVJ7aoWsHRiyNw/view
+- T014 独立审查报告 T014_REVIEW.md（18,015 B）：https://drive.google.com/file/d/1zLoDadseXqsGfrT9O6B_-6dptTJwuGxa/view
+
+核验事实（主控亲自验证）：source.zip 与 `git archive afcc2d1` 逐文件比对 238/238 逐字节一致，0 路径差异，0 字节差异；`sha256sum -c SHA256SUMS.txt` 3/3 OK；四项 S0 hash（scenario 1ffb5f85…、oracle_result 3502d81f…、analysis 4410d5c8…、gate 651c3fd4…）与 S0_GATE.json（SHA 15b5c2d5…）逐字段一致；dist.zip 49 条目与新鲜构建逐字节比对 49/49 一致；工作树 clean（仅未入仓的 coverage/ 生成目录）。
+
+## 四、如实记录的局限与未阻塞 P2（终审须知）
+
+1. T014 的 4 个 P2（非阻塞）：(a) dist.zip 不可独立运行（无 package.json/node_modules；UI 静态文件与 fixture 依赖 src/），且无文档明说——source.zip 才是完整可运行产物；(b) release:freeze 在 build 前不校验工作树 clean（本次 src/ clean，无影响）；(c) release:verify Check 6 不校验报告字节列、Check 4 不把 dist.zip 条目字节与磁盘 dist/ 比对（审查员已独立核实两项事实无误）；(d) 冻结报告验收章节手动补填、重跑 freeze 会重置回 PENDING（报告不在 SHA256SUMS/manifest 内，补填未改变已哈希产物）。
+2. T013 登记的 25 个 P2 全部非阻塞（已登记在案）：包括 S2 遗留（gate_sha256 复用 S0 schema 自述不准确、validateReportStructure 未交叉核对、canonical BFS witness 丢 meaning、depth-6 witness 在 4096 预算内不可达、浏览器覆盖只到 depth 2）、S3 遗留（浏览器内预览为近似值、单 fixture 导出非完整报告、BFS 默认 maxDepth=2）、T012 的 ADR-T012-1/2/3（规格 5 秒性能目标为“建议目标”，4096 次真实浏览器评估构造上不可达；内存仅计 Node RSS；P95 样本 n=3）、P2A detach 竞态测试偶发、validator 拒绝合法 depth-0 witness（FIX-03 已修复并验证）等。
+3. 性能数字为本机 VM 实测：192 用例总计约 6.8 秒，真实浏览器 BFS（F001）约 126–134 秒 BOUNDED_NO_WITNESS；大/深 DOM 未精确计时。
+4. 未在 Windows 上测试；真实浏览器 BFS 只测了 F001；键盘覆盖只测主流程。
+5. License 仍为 PENDING_SAM_DECISION：无 LICENSE 文件，公开再分发前须由 Sam 决定。
+
+## 五、请你裁决
+
+请下载 Drive 04_release 的冻结文件并独立重算 SHA-256，核对 source.zip 与冻结 commit 的一致性，运行 dist.zip 验证可用性，并按工厂终审格式给出：
+
+- FINAL_VERDICT: PASS 或 FAIL
+- P0 / P1 / P2 数量与逐条说明
+- BLOCKERS（无则写 NONE）
+- REQUIRED_NEXT_ACTIONS
+
+请使用谷歌云盘以及任何需要的插件，如果有了的话就算了。

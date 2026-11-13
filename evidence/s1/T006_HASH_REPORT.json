@@ -1,0 +1,284 @@
+{
+  "schema": "locatorstress.t006-hash-report/v1",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10",
+  "s0BaseCommit": "7bf1e00",
+  "task": "T006 Canonical JSON + four SHA-256 (S1)",
+  "frozenHashes": {
+    "scenario_sha256": "1ffb5f85561c6dd9f10fc15773097691c5c07fe20c6e9a001e231a41b61c9f22",
+    "oracle_result_sha256": "3502d81fa730605dd85548e39af6b7272015c026e65f91a2dae132c3e345a988",
+    "analysis_sha256": "4410d5c85cf5fe8ee858c4e01822cdbc1515c39afa7ba40d833aceb00a9576a4",
+    "gate_sha256": "651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52"
+  },
+  "recomputedHashes": {
+    "scenario_sha256": "1ffb5f85561c6dd9f10fc15773097691c5c07fe20c6e9a001e231a41b61c9f22",
+    "oracle_result_sha256": "3502d81fa730605dd85548e39af6b7272015c026e65f91a2dae132c3e345a988",
+    "analysis_sha256": "4410d5c85cf5fe8ee858c4e01822cdbc1515c39afa7ba40d833aceb00a9576a4",
+    "gate_sha256": "651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52"
+  },
+  "hashMatch": {
+    "scenario_sha256": true,
+    "oracle_result_sha256": true,
+    "analysis_sha256": true,
+    "gate_sha256": true,
+    "allFourCharacterIdentical": true
+  },
+  "canonicalBytes": {
+    "scenario": {
+      "bytes": 13502,
+      "sha256": "1ffb5f85561c6dd9f10fc15773097691c5c07fe20c6e9a001e231a41b61c9f22"
+    },
+    "oracle": {
+      "bytes": 24318,
+      "sha256": "3502d81fa730605dd85548e39af6b7272015c026e65f91a2dae132c3e345a988"
+    },
+    "analysis": {
+      "bytes": 848,
+      "sha256": "4410d5c85cf5fe8ee858c4e01822cdbc1515c39afa7ba40d833aceb00a9576a4"
+    },
+    "gate": {
+      "bytes": 2012,
+      "sha256": "651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52"
+    }
+  },
+  "canonicalByteSample": {
+    "description": "Crafted object with a decomposed key (e + combining acute), an astral-plane string (U+10000), a BMP private-use string (U+E000), nested keys out of order. Key sorting happens on raw (pre-NFC) keys; keys/values are then NFC-normalised. Input object (logical): {\"e\\u0301\": \"cafe\\u0301\", \"a\": [\"\\U00010000\", \"\\uE000\"], \"z\": {\"b\": 1, \"A\": 2}}.",
+    "canonical": "{\"a\":[\"𐀀\",\"\"],\"é\":\"café\",\"z\":{\"A\":2,\"b\":1}}",
+    "sha256": "1abba10e4491429e85dcda6dae5a43fabc40810867d8f1f7d2f9f97b70c15cf3"
+  },
+  "byteComparison": {
+    "moduleVsS0GateCanonicalJson": {
+      "method": "hash-contract.test.ts dynamically imports scripts/s0-gate.ts (read-only) and compares its exported canonicalJson against the module's canonicalJson",
+      "objectsCompared": [
+        "scenario",
+        "oracle",
+        "analysis",
+        "gate",
+        "crafted NFC/astral sample"
+      ],
+      "byteIdentical": true
+    },
+    "moduleVsIndependentSerializerInTest": {
+      "method": "small independent canonicaliser written in hash-contract.test.ts from the section 6 text (shares no code with src/canonical/)",
+      "objectsCompared": [
+        "scenario",
+        "oracle",
+        "analysis",
+        "gate",
+        "crafted NFC/astral sample"
+      ],
+      "byteIdentical": true
+    },
+    "independentPythonRecomputation": {
+      "method": "/tmp/p022-t006-python-check.py (Python stdlib only: unicodedata NFC + code-point sort + json.dumps separators; not committed) rebuilt all four objects from frozen evidence and hashed them",
+      "byteLengths": {
+        "scenario": 13502,
+        "oracle": 24318,
+        "analysis": 848,
+        "gate": 2012
+      },
+      "allFourMatchFrozen": true,
+      "sampleSha256MatchesJs": true
+    },
+    "determinism": "Same input twice gives identical canonical bytes for all four objects (asserted in hash-contract.test.ts); independent node:crypto SHA-256 over the bytes equals the module hash for all four objects."
+  },
+  "selfReferenceCheck": {
+    "scenarioCanonicalContainsOwnHash": false,
+    "oracleCanonicalContainsOwnHash": false,
+    "analysisCanonicalContainsOwnHash": false,
+    "gateCanonicalContainsOwnHash": false,
+    "gateCanonicalContainsGateSha256Field": false,
+    "gateCanonicalContainsLowerThreeHashes": true
+  },
+  "forbiddenFieldScan": {
+    "rulesRun": [
+      {
+        "id": "created-at",
+        "description": "Literal createdAt / created_at keys (wall-clock metadata)"
+      },
+      {
+        "id": "wall-clock-iso",
+        "description": "ISO-8601 timestamp with a time component (YYYY-MM-DDTHH:MM...); a bare date such as the fixed seed does not match"
+      },
+      {
+        "id": "epoch-millis",
+        "description": "13-digit millisecond epoch timestamp starting 16/17"
+      },
+      {
+        "id": "uuid",
+        "description": "UUID (8-4-4-4-12 hex, either case)"
+      },
+      {
+        "id": "cdp-object-id",
+        "description": "CDP temporary object id keys (objectId / remoteObjectId)"
+      },
+      {
+        "id": "cdp-dotted-id",
+        "description": "CDP-style dotted numeric id (>=6 digits . digits . digits)"
+      },
+      {
+        "id": "pid",
+        "description": "Process id (JSON \"pid\": key, pid:/pid=, processId, process.pid)"
+      },
+      {
+        "id": "windows-absolute-path",
+        "description": "Windows absolute path (drive letter + backslash)"
+      },
+      {
+        "id": "absolute-path-literal",
+        "description": "Machine absolute path literals: repo root, $HOME, tmpdir"
+      },
+      {
+        "id": "hostname-literal",
+        "description": "Machine hostname literal"
+      },
+      {
+        "id": "username-in-path",
+        "description": "Username as a path component or identifier (not a bare substring; fixture HTML contains 'shadowrootmode')"
+      }
+    ],
+    "hitsPerCanonicalObject": {
+      "scenario": 0,
+      "oracle": 0,
+      "analysis": 0,
+      "gate": 0
+    },
+    "hitsOnConcatenatedBytes": 0,
+    "totalHits": 0,
+    "scanContext": "repoRoot from test file location; HOME=/home/hatch; hostname=htch-runtime; username=root; tmpdir from os.tmpdir()"
+  },
+  "inputs": {
+    "files": {
+      "evidence/s0/S0_GATE.json": "15b5c2d5b4f995ffa40979101b94c21f4565617152dfc8f9ebf9b0e53cd3572d",
+      "evidence/s0/T002_MUTATION_REPORT.json": "93af9a183daa13c21ff05225656465d2ff570129f5b96ed40ba4ca8f04106bdb",
+      "src/fixtures/golden/expected-verdicts.json": "fa80e27a30ef6109664c154453171b975a7c27b31149cef456fd8174dfee189b",
+      "scripts/s0-gate.ts": "dfe87bcf1351e339391d064b6255d424281cf4740e9fe2c4910b02b08dd470c9",
+      "scripts/repeat-hash.ts": "6e2a6cd10317a01f9b10091dd2335edff394737b74f82f79678cb89e7c0364e3"
+    },
+    "reconstruction": "Scenario from 24 oracle-manifests + 24 HTML pages; oracle cases from T002 (192 cases, all match=true, actualVerdict==expectedVerdict); analysis tallies recomputed by plain loops in the test (verdictCounts 138/22/17/15, score 100x138/192=71.875, coverage, controls 96/0 + 96/0, oracleParity 192/192/0, analysisStatus COMPLETE); gate counts rebuilt with the module buildGateCounts and asserted canonical-equal to frozen S0_GATE.json counts; thresholds/notes asserted canonical-equal to frozen values. Expected hashes read from evidence/s0/S0_GATE.json at test run time, not hardcoded in tests; the module never sees them.",
+    "scriptsUnmodified": true
+  },
+  "section6Conflicts": [
+    {
+      "id": "C1",
+      "severity": "P1",
+      "field": "Array ordering ('数组稳定排序')",
+      "section6Literal": "Canonical JSON: ... 数组稳定排序 (arrays stably sorted)",
+      "frozenImplementation": "scripts/s0-gate.ts canonicalize() preserves array order; ordering is imposed explicitly by callers (fixtures by fixtureId, cases by fixtureId/mutationId, mutationSuite M01-M08, NOTES in fixed order). repeat-hash.ts serialize() also preserves array order.",
+      "moduleHandling": "Follows the frozen implementation: canonicalize() never sorts arrays; builders in hashes.ts sort explicitly exactly where s0-gate sorted. A generic array sort here WOULD change the frozen gate hash (the NOTES array is not in sorted order), so reproducing the frozen hash requires preserving order.",
+      "needsCoordinatorDecision": true,
+      "suggestedResolution": "Amend section 6 wording to: array order is fixed by the builders per section 5.7 (fixture/case/mutation order), and canonicalisation itself preserves array order."
+    },
+    {
+      "id": "C2",
+      "severity": "P2",
+      "field": "Numbers ('数值只用整数或明确十进制字符串')",
+      "section6Literal": "Numbers only integers or explicit decimal strings; no float determines truth.",
+      "frozenImplementation": "s0-gate.ts canonicalize() passes any finite number through to JSON.stringify (e.g. 1.5 -> '1.5', 1e21 -> '1e+21'). Frozen inputs happen to contain only integers plus the score as a decimal string, so no frozen hash is affected.",
+      "moduleHandling": "Follows the frozen implementation for number rendering; enforces the section 6 rule at the builder layer instead (counts validated as non-negative integers, stabilityScore.score required to be a string).",
+      "needsCoordinatorDecision": false
+    },
+    {
+      "id": "C3",
+      "severity": "P2",
+      "field": "Non-finite numbers",
+      "section6Literal": "Not specified literally; 'no float determines truth' implies they must not be silently accepted.",
+      "frozenImplementation": "s0-gate.ts silently coerces NaN/Infinity to null via JSON.stringify; repeat-hash.ts throws on non-finite numbers. The two frozen scripts disagree.",
+      "moduleHandling": "Throws (repeat-hash side). No frozen input contains a non-finite number, so no frozen hash is affected.",
+      "needsCoordinatorDecision": false
+    },
+    {
+      "id": "C4",
+      "severity": "P2",
+      "field": "undefined / function / symbol / bigint values",
+      "section6Literal": "Canonical inputs are JSON values; these are not JSON values.",
+      "frozenImplementation": "s0-gate.ts passes them through and lets JSON.stringify drop (object) or null (array) them; repeat-hash.ts throws on unsupported values.",
+      "moduleHandling": "Throws (repeat-hash side). No frozen input contains such a value, so no frozen hash is affected.",
+      "needsCoordinatorDecision": false
+    },
+    {
+      "id": "C5",
+      "severity": "P2",
+      "field": "Object keys colliding after NFC normalisation",
+      "section6Literal": "Not specified.",
+      "frozenImplementation": "s0-gate.ts dedupes (builds a plain object; last key in sorted order wins); repeat-hash.ts emits duplicate keys in the JSON text.",
+      "moduleHandling": "Follows s0-gate (dedupe). No frozen input contains colliding keys (all frozen keys are ASCII), so no frozen hash is affected.",
+      "needsCoordinatorDecision": false
+    }
+  ],
+  "observations": [
+    "Key sorting is done on RAW (pre-NFC) keys, then keys are NFC-normalised for output, in both frozen scripts and in this module. Output key order is therefore not necessarily sorted post-NFC (e.g. the crafted sample: raw key 'e+combining acute' sorts before 'z' by code point, then normalises to 'é', so output order is a, é, z). Frozen keys are ASCII, so this has no effect on frozen hashes.",
+    "Canonical bytes have no trailing newline; evidence files append a single LF when writing, which is not part of the hashed bytes. Hashing is over UTF-8 bytes.",
+    "Environment variable VALUES cannot be scanned without knowing them; they are excluded structurally (no builder in src/canonical/ reads process.env) and the literals that would leak (repo root, $HOME, tmpdir, hostname) are scanned. A generic 'any absolute Unix path' rule is deliberately NOT included: fixture HTML legitimately contains '/' (tags, XPath), so it would false-positive; the exact leakable literals plus the Windows drive-letter rule cover the leak vector.",
+    "The username rule matches only in path/identifier context because the frozen fixtures legitimately contain 'root' inside 'shadowrootmode' (F022-F024); a bare-substring rule would false-positive on frozen data."
+  ],
+  "acceptance": {
+    "test:canonical": {
+      "command": "npm run test:canonical",
+      "exitCode": 0,
+      "passed": 36,
+      "failed": 0,
+      "files": 2
+    },
+    "test:hash-contract": {
+      "command": "npm run test:hash-contract",
+      "exitCode": 0,
+      "passed": 11,
+      "failed": 0,
+      "files": 1
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "exitCode": 0
+    },
+    "typecheck:scripts": {
+      "command": "npm run typecheck:scripts",
+      "exitCode": 0
+    },
+    "regressionsNotTouched": {
+      "test:verdict": {
+        "exitCode": 0,
+        "passed": 37
+      },
+      "test:score": {
+        "exitCode": 0,
+        "passed": 16
+      },
+      "test:controls": {
+        "exitCode": 0,
+        "passed": 2
+      }
+    }
+  },
+  "files": {
+    "created": {
+      "src/canonical/canonical-json.ts": "8e1d72f31c59c3fc28ffdf08c2d55b86fab57b783defa2e44e2fd047b4914b06",
+      "src/canonical/hashes.ts": "bf567d61077d66661f714788dd146b9471f736f9c2b0cbf9f3f507e4ba23f17b",
+      "src/canonical/forbidden-scan.ts": "bba33d771c40a290690b9650868174b316153245a4c784bdc8d713d7f1f36f49",
+      "src/canonical/index.ts": "83b849ee9e11c827ced176c14a8166cb9074078060da805ee8d603e5632db3e0",
+      "src/canonical/node-shims.d.ts": "aa06b9e9ac71c1e7f1580ec7ad46481fe95611b19d8e130edcaf8c04f4bac8ee",
+      "tests/canonical/canonical-json.test.ts": "d61da1d016bdec29dd16a7fcc19e6658b44fb08277dfbe5353c311c965ab7d36",
+      "tests/canonical/forbidden-scan.test.ts": "1cfbbfd0092dca25fca831d687abaef553adbfadf4e9d4d504581a19e3e3e20c",
+      "tests/canonical/hash-contract.test.ts": "1d84f16e79aa0ab089d904d2e6735ad086c2124a5990247b2dedf716b221dcac"
+    },
+    "modified": {
+      "package.json": "85fe1b27654383d3d85f5052ee19190ecc73120994681bb564c4d048ef9e2d45"
+    }
+  },
+  "packageJsonScriptsAdded": {
+    "test:canonical": "vitest run tests/canonical/canonical-json.test.ts tests/canonical/forbidden-scan.test.ts",
+    "test:hash-contract": "vitest run tests/canonical/hash-contract.test.ts"
+  },
+  "deviationsAndOpenItems": [
+    "During development test:canonical initially failed 2/36: (1) the pid rule did not match the JSON-quoted key form {\"pid\":1234} (rule fixed to also match \"pid\":); (2) the Windows-path planted test string was over-escaped (double backslashes at run time, so the rule correctly did not match; test data fixed). Both were test/rule defects, not module defects; final run 36/36.",
+    "src/canonical/node-shims.d.ts was added because the project has no @types/node by design: it declares only node:crypto and node:os surfaces used by the canonical module. The shared src/node-builtins.d.ts was NOT modified. The module uses Uint8Array/TextEncoder (standard) instead of Buffer.",
+    "npm run s0:gate was NOT re-run in this session (about 17 minutes + 100x replay); the module does not touch scripts/, fixtures, verdict or score, and hash-contract proves byte-identical reproduction of the frozen gate hash from frozen evidence. Full s0:gate regression is left to the coordinator.",
+    "handoff/S1_COORDINATOR_STATE.md shows as modified in git status but that modification predates this session (coordinator's file); it was not touched here.",
+    "No model calls were needed: this task is deterministic implementation + verification, done directly. No bridge/CLI/agy route was used, so no route verification was required."
+  ],
+  "limitations": [
+    "C1 (P1) above: section 6 '数组稳定排序' vs frozen array-order preservation; module follows frozen; coordinator adjudication required.",
+    "C2-C5 (P2) above: documented frozen-vs-literal divergences with no effect on any frozen hash.",
+    "Forbidden-field scan cannot detect unknown environment-variable values by pattern; exclusion is structural (builders take explicit typed inputs, never read process.env).",
+    "The hash-contract test imports scripts/s0-gate.ts read-only for the byte comparison; it does not modify it. The frozen gate hash equality itself does not depend on that import (the four hash assertions use only frozen evidence files)."
+  ]
+}

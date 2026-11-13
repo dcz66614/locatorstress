@@ -1,0 +1,115 @@
+{
+  "task": "T010",
+  "status": "PASS",
+  "baseCommit": "a404fdf",
+  "headCommitAtGeneration": "a404fdfcf91a146af4360cde47f0fb61e6339676",
+  "generatedAtUtc": "2026-11-10T23:53:33.599Z",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10",
+  "sampleReport": {
+    "jsonPath": "evidence/s3/T010_SAMPLE_REPORT.json",
+    "htmlPath": "evidence/s3/T010_SAMPLE_REPORT.html",
+    "jsonSha256": "c327adc17e213e2a02aee85ec7d8400b052789d5740dc9e9ffd3bfb8d7a7e04c",
+    "htmlSha256": "e62c1804de95f0575ba4e977d1c578cf60462bf923e099240e796cd1d6b0fa1d",
+    "jsonBytes": 16721,
+    "htmlBytes": 53460,
+    "expectedCases": 16,
+    "completedCases": 16,
+    "verdictCounts": {
+      "STABLE": 15,
+      "WRONG_TARGET": 1,
+      "AMBIGUOUS": 0,
+      "MISSING": 0
+    },
+    "overallScore": "93.75",
+    "hashes": {
+      "scenario_sha256": "0263040df7261f9b1993ecc026ee08b10fd69c9d358f6bf4232d2f9e8c7a88d9",
+      "oracle_result_sha256": "f953492f745fece2c7a703bdcbd98034fb69a3ac3d8ff6e92918f8ca4f960ba5",
+      "analysis_sha256": "c61edcad866d833b892285635ccd2b3bf34acac3b20124f0d8b8523420a6f406",
+      "gate_sha256": "175831c4708ae1f1717b25ff0c10ac24497ca1c75708883d6d0210b0bcfc1074"
+    }
+  },
+  "consistency": {
+    "embeddedEqualsJsonExport": true,
+    "embeddedJsonEqualsCanonicalJson": true,
+    "externalResourceScanHits": []
+  },
+  "offlineBrowserCheck": {
+    "browser": "Chromium 1254 (pinned, headless, offline context, file:// open)",
+    "requestsObserved": [
+      "file:///home/hatch/workspace/p022-locatorstress/evidence/s3/T010_SAMPLE_REPORT.html"
+    ],
+    "nonFileRequests": [],
+    "dialogs": [],
+    "executableScripts": [
+      "application/json"
+    ],
+    "resourceTags": 0,
+    "eventHandlerAttributes": [],
+    "embeddedJsonInLiveDomEqualsCanonical": true,
+    "scoreVisibleInLiveDom": true
+  },
+  "acceptance": {
+    "npm run test:export": {
+      "exitCode": 0,
+      "passed": 11,
+      "files": 2
+    },
+    "npm run test:html-safety": {
+      "exitCode": 0,
+      "passed": 3,
+      "files": 1
+    },
+    "npm run typecheck": {
+      "exitCode": 0
+    },
+    "npm run test:export:json": {
+      "exitCode": 0,
+      "passed": 20,
+      "files": 3
+    },
+    "npm run test:ui": {
+      "exitCode": 0,
+      "passed": 12,
+      "files": 1
+    },
+    "npm run test:api": {
+      "exitCode": 0,
+      "passed": 30,
+      "files": 4
+    },
+    "npm run s0:gate": "NOT RUN (coordinator's job, per task)"
+  },
+  "changedFiles": [
+    "src/export/html-escape.ts",
+    "src/export/html-export.ts",
+    "src/export/templates/report.html.ts",
+    "tests/export/html-export.test.ts",
+    "tests/export/html-safety.test.ts",
+    "tests/export/t010-helpers.ts",
+    "package.json",
+    "evidence/s3/T010_SAMPLE_REPORT.json",
+    "evidence/s3/T010_SAMPLE_REPORT.html",
+    "evidence/s3/T010_EXPORT_REPORT.json"
+  ],
+  "untouchedProtected": [
+    "src/analysis",
+    "src/verdict",
+    "src/score",
+    "src/search",
+    "src/canonical",
+    "src/oracle",
+    "src/mutations",
+    "src/fixtures",
+    "src/runner",
+    "src/api",
+    "src/ui",
+    "evidence/s0",
+    "scripts"
+  ],
+  "knownLimitations": [
+    "P2-1: HTML export covers the T008 AnalysisReport only; the UI single-fixture export (locatorstress.ui-fixture-export/v1, T009 P2-3) is a different schema and is not converted by this exporter.",
+    "P2-2: witness notes are carried in the embedded JSON but not rendered as a visible table column (meaning + budget note are rendered); the full witness trace stays out of the report by design (up to 4096 records).",
+    "P2-3: sample report is the 2-fixture / 16-case synthetic input also used by the T008 tests, not a full 192-case run; the exporter is input-agnostic and the full-size report renders through the same code path."
+  ],
+  "gitStatusAtGeneration": "M package.json\n?? evidence/s3/T010_SAMPLE_REPORT.html\n?? evidence/s3/T010_SAMPLE_REPORT.json\n?? handoff/S3_COORDINATOR_STATE.md\n?? src/export/html-escape.ts\n?? src/export/html-export.ts\n?? src/export/templates/\n?? tests/export/html-export.test.ts\n?? tests/export/html-safety.test.ts\n?? tests/export/t010-helpers.ts"
+}

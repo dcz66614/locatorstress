@@ -1,0 +1,79 @@
+# P022 LocatorStress — 最终审查（第 3 轮）
+
+你好。这是 P022 LocatorStress（定位器压力台）的最终审查第 3 轮，仍在本立项对话进行。R2 裁决 FAIL（2026-11-11 ~23:26 GMT，P0 0 / P1 2 / P2 28），R1 的三个 P1 由你亲自实测确认已关闭，两个新 P1 已按你的返工要求全部修复并重新冻结。请按工厂终审规则审查并给出 FINAL_VERDICT。
+
+## 一、R2 两个 P1 的修复（逐项）
+
+**P022-R2-P1-01 自定义 HTML `<script/>` 绕过安全校验并执行用户 JS —— 已修复。**
+`validateCustomHtmlSafety()` 的正则 `/<script[\s>]/i` 已不再是唯一防线：新增结构化 HTML 分词器第二遍校验，拒绝一切形式的 `<script/>`（大小写、空白、斜杠变体）、SVG/MathML 内嵌 script、iframe srcdoc（递归到 3 层）、无引号/单引号/无值外部 URL（含 srcset）、实体混淆的 `javascript:` URI、`on*` 处理器（任意引号形式）。执行层防御：自定义场景的 3 个调用点（service 自定义 analyze、service 自定义 search、snapshotCustom）改用按页 CDP 开关 `withPageJavaScriptDisabled`（`Emulation.setScriptExecutionDisabled`，整个自定义分支持有会话，`finally` 中恢复）。说明：曾试过整库 `javaScriptEnabled:false`，已放弃——它会卡住 T001 Oracle 探针的页内定时器/图片事件（已实测），CDP 按页开关是经验证可行的路径。证据：新增 19 测试，npm test 609/609（当时），test:mutation 40/40，s0:gate PASS 且 gate hash 不变。独立复审（FIX-R2-01，报告见下）FINAL_VERDICT: PASS，P0 0 / P1 0 / P2 4：审阅员亲自重跑 build、npm test 609/609、mutation 40/40、s0:gate、verify:all 9/9，并做了 46+7 对抗校验探针（全部 script 执行写法均被拒，11/11 正向对照放行）与 14 项真实 Chromium 检查，包括一个比构建方更强的子帧父标记探针（证明开关能挡住 iframe 内脚本）。遗留 4 个非阻塞 P2（见第四节）。
+
+**P022-R2-P1-02 CLI Run Store 混用场景并覆盖报告 —— 已修复。**
+Run Store 现写入 `scenario_sha256` 指纹（复用冻结的 `hashCanonical`）：fixture 为 `{kind:"fixture", fixtureId}`，自定义为整份场景文档 `{kind:"custom", scenario}`（与键顺序无关，不含文件路径）；`search` 仅在存储指纹与当前场景一致时保留旧 analysis，指纹不符或无指纹（旧版）时丢弃并重新分析；`analyze`/`search` 写入前校验指纹格式（非法则 fail-closed INVALID_RUN）；保留 ID 集合 `RESERVED_RUN_IDS` = demo、t008、F001–F024（26 个），自定义 scenario_id 命中保留 ID 时在启动浏览器前即以 RESERVED_RUN_ID 拒绝；已存完整报告在无明确授权时绝不覆盖（REPORT_OVERWRITE_REFUSED）。证据：新增 21 测试（新 tests/cli/run-store.test.ts 14 单元测试 + 7 CLI 测试，含你的 P1-02 原样复现），npm test 630/630，test:mutation 40/40，s0:gate PASS 且 gate hash 不变；修复前/后对照：新 CLI 测试在修复前 7 失败、修复后 7 通过。独立复审（FIX-R2-02，报告见下）FINAL_VERDICT: PASS，P0 0 / P1 0 / P2 0 新增：审阅员不信任上一任审阅员的数字、全部亲自重跑（npm test 630/630、mutation 40/40、s0:gate、verify:all 9/9、review-pack 仅 1 个已知问题），并把你的 P1-02 实测逐项重跑通过：(a) analyze 场景 A（button.primary，STABLE，指纹 `7278bd73…` 与独立算出的 hashCanonical 一致）→ 同 ID 改 HTML（单个 secondary 按钮）search → depth-0 MISSING witness，导出文件无 analysis 字段（旧分析已丢弃），场景为 B，指纹 `5a2c1c66…` 与 B 一致；(c) 同 ID 改 locator → 旧分析丢弃，witness WRONG_TARGET，指纹与新场景一致；(b) scenario_id `"demo"` 时 analyze 与 search 均 exit 1 RESERVED_RUN_ID，runs/demo.json 逐字节未变；预置完整报告时 analyze 与 search 均 REPORT_OVERWRITE_REFUSED，文件逐字节未变；正向对照：同场景重 search 保留 STABLE 分析（保留逻辑未被一刀切删掉）。说明：第一任 FIX-R2-02 独立审阅员在 EPERM 存储抖动中两次中断、09:44 后无音讯且未留下 REVIEW.md，已作废；第二任审阅员从零重跑并 PASS，数字全部是第二任的实测。
+
+## 二、新冻结产物（重冻结，冻结对象 a834eea；冻结提交 cd15e63）
+
+Drive 04_release 文件夹：https://drive.google.com/drive/folders/1WCE3b9pebHg32rTVw4JBREkD_hxAt9Tj
+
+| 文件 | 大小 | SHA-256 |
+|---|---|---|
+| source.zip | 15,618,130 B | a4cbb9343a52299b2d362430aeaca1ea5104011dee7ea159c4726c4ecb73ed12 |
+| dist.zip | 371,752 B | 555f54196d4ac1c09070ee8ec366250028e82581838a50a05476be64e5ff339c |
+| RELEASE_MANIFEST.json | 3,942 B | a8f6fc5cbef7c0d8aa2792aa476790b54c0a5830251f977ea34aaba96264c6b4 |
+| SHA256SUMS.txt | 240 B | deab6c100a8f39e65a753963faf04e40d3c5f3c0cdbc7888e3818bd44ad6d5f5 |
+| R2_FREEZE_REPORT.md | 7,879 B | c12b957b370b3d9d058e9da21f32c47845eb0cde38880ec9f41630bd1992ad25 |
+| P022-R2-FREEZE.bundle | 15,707,613 B | f1fb5ac43e096e6d89d15a88675e128c8c2c7cac32ecfd02137306d118d11e9a |
+
+Drive 单文件链接（已上传并重新下载核验 SHA）：
+- source.zip：https://drive.google.com/file/d/108oGbJOAuVEVY1oLSEtCfCemqKAlM4I-/view
+- dist.zip：https://drive.google.com/file/d/1gFp2cTOby_WbPMlrPVQKQk7g9uvl3cGF/view
+- RELEASE_MANIFEST.json：https://drive.google.com/file/d/1Shs2uv50IQPozzSNN6XLd4jmzdRtmFoB/view
+- SHA256SUMS.txt：https://drive.google.com/file/d/1F_QZqJIBUvDkCuTCFMO0GWDu0idqhdgc/view
+- R2_FREEZE_REPORT.md：https://drive.google.com/file/d/1_8j9d2jP5iPeFB5Dv8JctNEHznrCC_an/view
+- P022-R2-FREEZE.bundle：https://drive.google.com/file/d/1qdahRBFrglwu_rxYdHvC25dhtDa40yhA/view
+
+旧的 R1 冻结文件仍在同一 04_release 文件夹内，不要与新文件混淆。
+
+**重要：请使用顶层的 `release/P022-R2-FREEZE.bundle`（head a834eea）。** 克隆时必须指定分支（该 bundle 唯一的 ref 是 `refs/heads/r2-frozen`，普通 `git clone` 会报 remote HEAD 不存在）：
+
+`git clone --branch r2-frozen P022-R2-FREEZE.bundle`
+
+source.zip 内嵌了一个陈旧的 R1 bundle（head d26a3cc，7,044,453 B，SHA bab36e27…）和 R1 source.zip（6,996,297 B，SHA ebd66c01…），因为冻结对象 a834eea 的树本身就包含 R1 重冻结 #2 提交 935a3db 时收入的发布物——冻结报告已如实披露（附从 source.zip 解出并核验的 SHA 与 `git bundle verify` 结果），source.zip 因此从 6,996,297 B 增大到 15,618,130 B（297 文件，= git ls-tree a834eea 的 297）。这是有意保留、不是疏漏：source.zip 的定义就是 `git archive --format=zip a834eea` 的逐字节输出（release:compare-source 验证 297/297 一致），从归档里剔除这些文件会破坏该恒等式，从树里剔除则需要一个新的冻结对象、从而作废 FIX-R2-02 的独立复审（PASS 0/0/0，审在 a834eea 上）。冻结流程未变。顶层 R2 bundle 经克隆 + git archive 与 source.zip 逐字节一致（sha a4cbb934… 双方）。
+
+独立审查文件（同在 04_release）：
+- FIX-R2-01 独立审查报告 handoff/FIX-R2-01/REVIEW.md（16,136 B）：FINAL_VERDICT: PASS，P0 0 / P1 0 / P2 4 —— https://drive.google.com/file/d/10_uzDxlERaeIPQJD8Rh_hiCwFboX8tJV/view
+- FIX-R2-02 独立审查报告 handoff/FIX-R2-02/REVIEW.md（7,429 B）：FINAL_VERDICT: PASS，P0 0 / P1 0 / P2 0 新增 —— https://drive.google.com/file/d/1d1smnr2qAI4UHNiQEdgDiT-2XNvccbs2/view
+- FIX-R2-03 冻结复审报告 handoff/FIX-R2-03/REVIEW.md（8,836 B）：FINAL_VERDICT: PASS，P0 0 / P1 0 / P2 2（非阻塞：bundle 单一 ref 须用 --branch 克隆；review-pack 须在测试运行后恢复证据副产物）—— https://drive.google.com/file/d/1tS7YsqDsh7Ij28Qf2kYoqGjc3l3CUW2-/view
+- 重冻结报告 release/R2_FREEZE_REPORT.md（7,879 B）
+
+## 三、核验事实（主控 Muse 亲自重跑验证，2026-11-13 ~01:36–02:09 GMT；验证脚本日志 ~/workspace/coordinator-logs/muse-r3-verify.log）
+
+- npm test 630/630（49 文件，355.39 秒，开始 01:36:03），exit 0。
+- test:mutation 单独重跑 40/40 = 100.0%（0 存活，0 配置错误），exit 0。
+- s0:gate GATE PASS（failure_type=null），四项 S0 hash 与冻结值逐字一致（scenario 1ffb5f85…、oracle_result 3502d81f…、analysis 4410d5c8…、gate 651c3fd4…），S0_GATE.json SHA 15b5c2d5…，重放 100/100，1 唯一 hash。
+- verify:all PASSED，9/9 全绿（534.0 秒）。
+- release:verify PASSED；release:compare-source 297/297 逐字节一致；release:verify-hashes 3/3。
+- git bundle 克隆（`git clone --branch r2-frozen`，head a834eea）+ git archive --format=zip 与 source.zip 逐字节一致（sha a4cbb934… 双方）。
+- verify:review-pack：首次运行显示恰好 3 个问题，全部是测试运行改写的证据副产物（S0_P2A.log、T012_E2E_REQUESTS.json、T012_PERF.json），与 R1 轮次同一已知模式；从 git 恢复三者后重跑仍报 8 个不匹配——原因是恢复时连同 handoff/T013/ 一起从 git 恢复，把构建方在本次重冻结时做的审查包重新登记（R2 的 13 个 hash 更新、42 行 re-confirmed 备注、3 个新测试行）还原成了 R1 基线。我按构建方留下的书面程序（FIX-R1-04 报告 §1 第 3 步及 R2 冻结报告的重新登记说明）重新推导并重跑了登记脚本（~/workspace/coordinator-logs/regen_pack_r2.py），与构建方原版逐项一致（sha256.txt 148 条、13 个 hash 更新；COVERAGE_MATRIX.csv 185→188 行、14 行指标更新、42 行 re-confirmed、3 个新行；CRLF 保留、无 CSV 引号；非脚本 hash 逐项对 `git show a834eea:` 核对一致），随后 verify:review-pack PASSED（148/148，0 问题）。冻结产物本身（source.zip / dist.zip 的 SHA）在整个验证过程中未变。
+- 冻结复审（新会话独立审阅员，2026-11-13 ~03:28–04:20 GMT，报告 handoff/FIX-R2-03/REVIEW.md）：FINAL_VERDICT: PASS，P0 0 / P1 0 / P2 2（非阻塞）。审阅员从零重跑全部检查：六个冻结产物 SHA/大小逐项一致；release:verify、compare-source 297/297、verify-hashes 3/3；bundle 用 --branch r2-frozen 克隆后 archive 与 source.zip 逐字节一致；npm test 630/630、mutation 40/40、s0:gate PASS（gate hash 精确一致）、verify:all 9/9、verify:review-pack 148/148；并独立数出矩阵中 42 行 re-confirmed 备注，确认 P2-RVW-02 已关闭、在案 P2 总数 31 一致。
+- 每次测试运行后改写的证据副产物（S0_P2A.log、T012_PERF.json、T012_E2E_REQUESTS.json、matrix-F002.png、T012_CUSTOM_E2E_REQUESTS.json）均已从 git 恢复，冻结 SHA 逐项核对一致；工作树除冻结文件与未入仓的 coverage/、.tmp-gate-r2/ 外无改动。
+
+## 四、如实记录的局限与未阻塞 P2（终审须知）
+
+1. R2 的 28 个 P2 中，P2-RVW-02（COVERAGE_MATRIX.csv 注释栏仍写 "frozen commit 23a5a91"）已由本次重冻结的审查包重新登记关闭：42 行仍引 23a5a91 的备注后均已追加 "; re-confirmed at R2 freeze (frozen commit a834eea)"（R1 历史保留在备注内），verify:review-pack 148/148 通过。其余 27 个全部保留为非阻塞：T013 剩余 19 + T014 的 4 + R2 新增 4（FIX-R1-02 P2-1：/api/export 422 未提示 /ui/export-html；FIX-R1-03 P2-1：坏 run id 退出 1 与文档写的 2 不一致；FIX-R1-03 P2-2：test:cli afterAll 会删除既有 demo/F002/F003 run 文件；P2-RVW-01 内嵌陈旧 bundle，见上）。
+2. 本轮新增的非阻塞 P2：FIX-R2-01 审阅的 4 项（P2-R2-01-1：外部 URL scheme 内含 tab/换行时校验放行，仅 fetch 层面，路由处理已现场拦截；P2-R2-01-2：style 属性内实体混淆的 `url(` 校验放行，仅 fetch 层面；P2-R2-01-3：srcdoc 浏览器测试断言的是顶层窗口而非子帧——产品行为正确，测试比宣称的弱；P2-R2-01-4：旧测试注释仍写 "javaScriptEnabled:false"）。FIX-R2-02 审阅新增 0 项。合计在案非阻塞 P2 为 31 个。
+3. dist.zip 是构建输出 + 文档包，不可独立运行（无 package.json/node_modules；UI 静态文件与 fixture 依赖 src/），运行产品须用 source.zip + npm ci + npm run build（T014 P2-1，仍开放）。
+4. CLI demo 报告按构造为 FAIL / DEMO_SUBSET（仅 F001–F003，24 cases），不是 192 用例门禁；门禁以 npm run s0:gate 为准。
+5. /api/export 保持仅完整报告：自定义形状报告诚实返回 422，自定义运行经 POST /ui/export-html 导出 HTML（已接受的判定）。
+6. 未在 Windows 上测试；真实浏览器 BFS 只测了 F001；键盘覆盖只测主流程。
+7. License 仍为 PENDING_SAM_DECISION：无 LICENSE 文件，公开再分发前须由 Sam 决定。
+
+## 五、请你裁决
+
+请下载 Drive 04_release 的冻结文件并独立重算 SHA-256，克隆顶层 git bundle（head a834eea，必须用 `git clone --branch r2-frozen P022-R2-FREEZE.bundle`，普通 clone 会失败）并自行运行 git archive 核对 source.zip 的一致性，实测两个 P1 的修复（`<script/>` 及同类绕过写法是否仍能执行 JS；同 ID 换场景/Locator 后旧分析是否丢弃、保留 ID 与完整报告是否拒绝覆盖），并按工厂终审格式给出：
+
+- FINAL_VERDICT: PASS 或 FAIL
+- P0 / P1 / P2 数量与逐条说明
+- BLOCKERS（无则写 NONE）
+- REQUIRED_NEXT_ACTIONS
+
+请使用谷歌云盘以及任何需要的插件，如果有了的话就算了。

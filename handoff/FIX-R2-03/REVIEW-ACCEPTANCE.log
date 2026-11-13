@@ -1,0 +1,61 @@
+P022 FIX-R2-03 independent freeze review — acceptance log
+Reviewer: fresh session, 2026-11-13 ~03:28-04:20 GMT
+Frozen object a834eea; freeze commit cd15e63. Full battery log:
+~/workspace/coordinator-logs/r2-03-review-acceptance.log
+Battery script: ~/workspace/coordinator-logs/r2-03-review-acceptance.sh
+TMPDIR: .tmp-r2-03-review/ (deleted after the run)
+
+--- repo state ---
+git log --oneline -1: cd15e63 P022 R2 rework FIX-R2-03: re-freeze a834eea (R3 candidate)
+git status --short: clean except untracked .tmp-gate-r2/, coverage/,
+  handoff/P022-FINAL-R2/, handoff/P022-FINAL-R3/
+
+--- freeze artifacts recomputed (all match claims) ---
+source.zip 15,618,130 B a4cbb9343a52299b2d362430aeaca1ea5104011dee7ea159c4726c4ecb73ed12
+dist.zip 371,752 B 555f54196d4ac1c09070ee8ec366250028e82581838a50a05476be64e5ff339c
+RELEASE_MANIFEST.json 3,942 B a8f6fc5cbef7c0d8aa2792aa476790b54c0a5830251f977ea34aaba96264c6b4
+SHA256SUMS.txt 240 B deab6c100a8f39e65a753963faf04e40d3c5f3c0cdbc7888e3818bd44ad6d5f5
+R2_FREEZE_REPORT.md 7,879 B c12b957b370b3d9d058e9da21f32c47845eb0cde38880ec9f41630bd1992ad25
+P022-R2-FREEZE.bundle 15,707,613 B f1fb5ac43e096e6d89d15a88675e128c8c2c7cac32ecfd02137306d118d11e9a
+
+--- release checks (exit codes read directly) ---
+release:verify exit=0 — PASSED (6/6)
+release:compare-source exit=0 — PASSED, 297/297 byte-identical
+release:verify-hashes exit=0 — PASSED, 3/3
+
+--- bundle ---
+git clone --branch r2-frozen: HEAD a834eea; bundle verify: is okay, complete history,
+  single ref refs/heads/r2-frozen
+git archive --format=zip a834eea in clone: a4cbb934..., 15,618,130 B — byte-identical to source.zip
+nested R1 bundle from source.zip: bab36e27c6862b890ea3c5a39ddf9e7035aabe1e3347a117ef9d0df3b39b41d2
+nested R1 source.zip from source.zip: ebd66c019826d8fa9c1b94b502c98ae0e31770f0f682bb66ad1c84292a035a74
+
+--- acceptance battery (sequential, evidence restored after each step) ---
+npm test: exit=0 — 49 files, 630/630 passed, 451.58s
+test:mutation: exit=0 — 40/40 = 100.0%, 0 survived, 0 config errors
+s0:gate: exit=0 — GATE PASS, failure_type=null,
+  gate_sha256=651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52,
+  replay 100/100, 1 unique hash
+verify:all: exit=0 — PASSED, all 9 steps green, 896.5s total
+  (step 4 test 315.3s, step 5 oracle 83.5s, step 6 offline 23.1s,
+   step 7 stress 13.0s, step 8 coverage 357.4s, step 9 mutation 83.1s)
+verify:review-pack: exit=0 — PASSED (18/18 files; matrix 188 rows, 117 src files,
+  0 missing, 0 mismatches; sha256.txt 148/148 match)
+
+--- frozen evidence SHAs after all runs (restored from git) ---
+S0_GATE.json 15b5c2d5b4f995ffa40979101b94c21f4565617152dfc8f9ebf9b0e53cd3572d
+S0_P2A.log 2a76dec117c42ee2e5bfcf44b452407222658b3665c39dc47f0e21c957e06a5d
+T012_PERF.json b1838d3ff1c0a20d9f3961f58a7469bc451352d4c7c4ca01602101ba6f57e589
+T012_E2E_REQUESTS.json 497de20a8405aadf8af3e689708e764c1f300d3e0afe36f539cc19779b206197
+T012_CUSTOM_E2E_REQUESTS.json f7a8159c89dd1b0e08bb495ed130abe4d883cbfd668c3c76335ccc4bf8e81cbc
+matrix-F002.png d814537d961fb6d9c0e54437826f5c8090eb41d209c382229f85f2e9d3b9a7a2
+
+--- P1 spot-checks (frozen tree a834eea, read-only) ---
+P1-01: tokenizer in src/contracts/custom-scenario.ts (9 hits) +
+  withPageJavaScriptDisabled (CDP Emulation.setScriptExecutionDisabled) in
+  src/runner/browser.ts, used by src/api/service.ts — PRESENT
+P1-02: scenario_sha256 + scenarioFingerprint + RESERVED_RUN_IDS +
+  isReservedRunId + REPORT_OVERWRITE_REFUSED in src/cli/run-store.ts and
+  src/cli/commands/input.ts — PRESENT
+
+FINAL_VERDICT: PASS — P0 0 / P1 0 / P2 2 (both non-blocking; see REVIEW.md)

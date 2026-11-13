@@ -1,0 +1,69 @@
+# P022 LocatorStress — 最终审查（第 2 轮）
+
+你好。这是 P022 LocatorStress（定位器压力台）的最终审查第 2 轮，仍在本立项对话进行。R1 裁决 FAIL（2026-11-11 ~11:01 GMT，P0 0 / P1 3 / P2 23），三个 P1 已按你的返工要求全部修复并重新冻结。请按工厂终审规则审查并给出 FINAL_VERDICT。
+
+## 一、R1 三个 P1 的修复（逐项）
+
+**P022-R1-P1-01 自定义合成 HTML / Locator 未接入分析与 BFS —— 已修复。**
+POST /api/analyze 与 /api/search 现接受用户提交的 locatorstress.scenario/v1 场景 + 私有目标描述符，走真实 Playwright + M01–M08 + Oracle + 有界 BFS；Web UI 新增“自定义输入”模式，可编辑 HTML + LocatorSpec + 目标并校验、运行 analyze/search。Oracle 私有目标句柄永不写入 DOM、不返回给 API、不传给被测定位器；目标歧义/缺失诚实返回 422，不安全 HTML（script、外部 URL、超大）返回 400。证据：test:custom 32/32、test:e2e:custom 6/6；独立复审（FIX-R1-04）现场实测 /api/analyze 自定义场景 HTTP 200（source "custom"，2 cases）、/api/search HTTP 200 FOUND 带真实 witness（M03，depth 1）。
+
+**P022-R1-P1-02 HTML 导出未接入正式流程 —— 已修复。**
+exportReportHtml() 已接入 /api/export（format=html 现为 HTTP 200 text/html）与 Web UI（新增“下载本次分析 HTML”按钮 + POST /ui/export-html）；完整报告 JSON/HTML 语义一致，HTML 可离线打开、零外部资源，7 个 XSS 向量全部通过。证据：test:export 11/11、test:html-safety 3/3、test:export:api 10/10；独立审阅 PASS（P0 0 / P1 0 / P2 1，报告见下）。已接受的判定：/api/export 按冻结 ReportCase 契约保持仅完整报告，自定义形状报告诚实返回 422 INVALID_REPORT，不伪造 golden 结论；自定义运行经 /ui/export-html 导出 HTML。遗留 P2-1（非阻塞）：422 消息未提示 /ui/export-html。
+
+**P022-R1-P1-03 五个 CLI 命令缺失 —— 已修复。**
+新增 src/cli/（12 文件）+ tests/cli 30 测试 + 6 个 npm 脚本：npm run dev / demo / analyze / search / export / test:cli；运行存为 runs/<id>.json 信封；demo 确定性离线（F001–F003，24 cases，score 75，0 外部请求），诚实标注 FAIL / DEMO_SUBSET。证据：test:cli 30/30；独立审阅 PASS（P0 0 / P1 0 / P2 2）：审阅员现场跑通全部 5 条命令与 25 条错误路径，demo 实测 exit 0（24/24），export -- --run demo --format html 实测 exit 0（71,708 B）。遗留 P2 两项（均非阻塞）：坏 run id 退出 1 INVALID_RUN_ID 但文档写退出 2 CLI_USAGE；test:cli afterAll 会删除 5 个 id 白名单内的既有 runs。
+
+**FIX-R1-05（R1 返工中发现并修复）：**重冻结 #1 时 test:mutation 39/40，变异体 M-RT-03 陈旧（其锚点 status: 501 在 FIX-R1-02 后已不在 routes.ts 中），属测试工具问题、非产品缺陷。已替换为针对新 200/HTML 行为的回归变异体，现 test:mutation 40/40 = 100%，verify:all 9/9 全绿。
+
+## 二、新冻结产物（重冻结 #2，冻结提交 935a3db，冻结对象 d26a3cc）
+
+Drive 04_release 文件夹：https://drive.google.com/drive/folders/1WCE3b9pebHg32rTVw4JBREkD_hxAt9Tj
+
+| 文件 | 大小 | SHA-256 |
+|---|---|---|
+| source.zip | 6,996,297 B | ebd66c019826d8fa9c1b94b502c98ae0e31770f0f682bb66ad1c84292a035a74 |
+| dist.zip | 349,982 B | 50a9d20609d2dc4b2027339077c93e64047f8757ef23e5f01cbb7e178ccd2057 |
+| RELEASE_MANIFEST.json | 3,941 B | 8924e10284a56f616627c797498781a5faefa9727a1ec8dd2b0dd20850a57a1d |
+| SHA256SUMS.txt | 240 B | e44d7f629bf07320ea9d27e528424186657382a805c02045bb6bfb5cc29b74b6 |
+| R1_FREEZE_REPORT.md | 15,197 B | c687002c4afe975bdd19e462a7c04642be999a6d6acb4a19e5018fc7c4ffc9fa |
+| P022-R1-FREEZE.bundle | 7,044,453 B | bab36e27c6862b890ea3c5a39ddf9e7035aabe1e3347a117ef9d0df3b39b41d2 |
+
+**重要：请使用顶层的 `release/P022-R1-FREEZE.bundle`（head d26a3cc）。** source.zip 内嵌了一个陈旧的重冻结 #1 bundle（head 23a5a91，2,734,280 B），因为冻结树把重冻结 #1 的发布物也收入了——冻结报告已如实披露，source.zip 因此从 2,754,449 B 增大到 6,996,297 B（284 文件，= git ls-tree d26a3cc 的 284）。顶层 bundle 经三方各自克隆 + git archive 均与 source.zip 逐字节一致（sha ebd66c01…）。冻结 #1 的文件（source.zip sha 1e6ce2fe…、bundle sha 5bf4429b…）已被取代，不要使用。
+
+独立审查文件（同在 04_release）：
+- FIX-R1-02 独立审查报告 FIX-R1-02_REVIEW.md（17,212 B）：https://drive.google.com/file/d/1ZuGztkpTk1f7AbOpOldXKnvcKG3xzREh/view
+- FIX-R1-03 独立审查报告 FIX-R1-03_REVIEW.md（22,972 B）：https://drive.google.com/file/d/1vKvCRlsz2mrZWmTKSCMSuR0UyuIXcgPm/view
+- FIX-R1-04 独立审查报告 FIX-R1-04_REVIEW.md（21,809 B）：https://drive.google.com/file/d/1qTwLqHUumz3kGmEYdAUA6ft1oeOMxo8R/view
+- 重冻结 #2 报告 R1_FREEZE_REPORT.md（15,197 B）：https://drive.google.com/file/d/10GLJhpghAoY705srC_K2aBk69GkFFjUq/view
+- git bundle P022-R1-FREEZE.bundle（7,044,453 B）：https://drive.google.com/file/d/19aDU6JldYjSrFD4SZt9f7_zxQV91t8Wg/view
+
+## 三、核验事实（主控 Muse 亲自重跑验证，2026-11-11 ~22:25–22:58 GMT）
+
+- npm test 590/590（46 文件，377.57 秒），exit 0。
+- s0:gate GATE PASS（failure_type=null），四项 S0 hash 与冻结值逐字一致（scenario 1ffb5f85…、oracle_result 3502d81f…、analysis 4410d5c8…、gate 651c3fd4…），S0_GATE.json SHA 15b5c2d5…，重放 100/100，1 唯一 hash。
+- verify:all PASSED，9/9 全绿（486.7 秒）；test:mutation 单独重跑 40/40 = 100.0%（0 存活，0 配置错误）。
+- verify:review-pack PASSED（148/148；首次跑因测试运行改写了两份证据副产物而报 2 项哈希不符，已按冻结报告的既定做法从 git 恢复副产物、核对冻结 SHA 后重跑通过——非产品缺陷）。
+- release:verify PASSED；release:compare-source 284/284 逐字节一致；release:verify-hashes 3/3。
+- git bundle 克隆 + git archive --format=zip 与 source.zip 逐字节一致（sha ebd66c01… 双方）。
+- 工作树 clean（仅未入仓的 coverage/ 生成目录）。
+
+## 四、如实记录的局限与未阻塞 P2（终审须知）
+
+1. R1 的 23 个 P2 全部保留为非阻塞，未要求在 R2 前修完；T013 的 25 个 P2 与 T014 的 4 个 P2 同样保留在案。
+2. 本轮新增的非阻塞 P2：FIX-R1-02 审阅 P2-1（422 未提示 /ui/export-html）；FIX-R1-03 审阅 P2-1（坏 run id 退出码与文档不一致）、P2-2（test:cli 清理会删既有 runs）；FIX-R1-04 审阅 P2-RVW-01（source.zip 内嵌陈旧冻结 #1 bundle，见上）、P2-RVW-02（COVERAGE_MATRIX.csv 注释栏仍写 "frozen commit 23a5a91"，纯外观，哈希是新的且验证通过）。
+3. dist.zip 是构建输出 + 文档包，不可独立运行（无 package.json/node_modules；UI 静态文件与 fixture 依赖 src/），运行产品须用 source.zip + npm ci + npm run build（T014 P2-1，仍开放）。
+4. CLI demo 报告按构造为 FAIL / DEMO_SUBSET（仅 F001–F003，24 cases），不是 192 用例门禁；门禁以 npm run s0:gate 为准。
+5. /api/export 保持仅完整报告：自定义形状报告诚实返回 422，自定义运行经 POST /ui/export-html 导出 HTML（已接受的判定）。
+6. 未在 Windows 上测试；真实浏览器 BFS 只测了 F001；键盘覆盖只测主流程。
+7. License 仍为 PENDING_SAM_DECISION：无 LICENSE 文件，公开再分发前须由 Sam 决定。
+
+## 五、请你裁决
+
+请下载 Drive 04_release 的冻结文件并独立重算 SHA-256，克隆顶层 git bundle 并自行运行 git archive 核对 source.zip 的一致性，实测三个 P1 的修复（自定义场景 analyze/search、HTML 导出、五条 CLI 命令），并按工厂终审格式给出：
+
+- FINAL_VERDICT: PASS 或 FAIL
+- P0 / P1 / P2 数量与逐条说明
+- BLOCKERS（无则写 NONE）
+- REQUIRED_NEXT_ACTIONS
+
+请使用谷歌云盘以及任何需要的插件，如果有了的话就算了。

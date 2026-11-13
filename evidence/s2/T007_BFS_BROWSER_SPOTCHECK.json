@@ -1,0 +1,96 @@
+{
+  "schema": "locatorstress.t007-bfs-browser-spotcheck/v1",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10",
+  "goldenCases": 192,
+  "runs": [
+    {
+      "fixtureId": "F002",
+      "maxDepth": 1,
+      "status": "FOUND",
+      "witness": {
+        "sequence": [
+          "M01"
+        ],
+        "depth": 1,
+        "verdict": "WRONG_TARGET"
+      },
+      "limits": {
+        "maxDepth": 1,
+        "maxExpandedStates": 4096
+      },
+      "statesEvaluated": 2,
+      "statesExpanded": 1,
+      "statesDeduplicated": 0,
+      "uniqueStates": 2,
+      "incompleteStates": 0,
+      "maxDepthReached": 1,
+      "queueRemaining": 7,
+      "notes": [],
+      "replayVerdict": "WRONG_TARGET",
+      "replayMatchesWitness": true
+    },
+    {
+      "fixtureId": "F003",
+      "maxDepth": 1,
+      "status": "FOUND",
+      "witness": {
+        "sequence": [
+          "M04"
+        ],
+        "depth": 1,
+        "verdict": "AMBIGUOUS"
+      },
+      "limits": {
+        "maxDepth": 1,
+        "maxExpandedStates": 4096
+      },
+      "statesEvaluated": 5,
+      "statesExpanded": 1,
+      "statesDeduplicated": 0,
+      "uniqueStates": 5,
+      "incompleteStates": 0,
+      "maxDepthReached": 1,
+      "queueRemaining": 4,
+      "notes": [],
+      "replayVerdict": "AMBIGUOUS",
+      "replayMatchesWitness": true
+    },
+    {
+      "fixtureId": "F001",
+      "maxDepth": 1,
+      "status": "BOUNDED_NO_WITNESS",
+      "witness": null,
+      "limits": {
+        "maxDepth": 1,
+        "maxExpandedStates": 4096
+      },
+      "statesEvaluated": 9,
+      "statesExpanded": 1,
+      "statesDeduplicated": 0,
+      "uniqueStates": 9,
+      "incompleteStates": 0,
+      "maxDepthReached": 1,
+      "queueRemaining": 0,
+      "notes": []
+    },
+    {
+      "fixtureId": "F001",
+      "maxDepth": 2,
+      "status": "BOUNDED_NO_WITNESS",
+      "witness": null,
+      "limits": {
+        "maxDepth": 2,
+        "maxExpandedStates": 4096
+      },
+      "statesEvaluated": 65,
+      "statesExpanded": 9,
+      "statesDeduplicated": 21,
+      "uniqueStates": 44,
+      "incompleteStates": 0,
+      "maxDepthReached": 2,
+      "queueRemaining": 0,
+      "notes": [],
+      "externalRequests": 0
+    }
+  ]
+}

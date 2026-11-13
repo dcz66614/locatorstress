@@ -1,0 +1,42 @@
+{
+  "schema": "locatorstress.t001-baseline/v1",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10",
+  "playwright": "1.65.0",
+  "chromium": "158.0.8127.18",
+  "node": "v24.22.1",
+  "baseline": {
+    "htmlBytes": 122,
+    "locator": {
+      "kind": "css",
+      "selector": "button.primary"
+    },
+    "privateTargetPathUsed": true,
+    "rawMatchCount": 1,
+    "finalMatchCount": 1,
+    "executionStatus": "COMPLETED",
+    "identityMatch": true
+  },
+  "identityProbe": {
+    "nodeIdentity": true,
+    "wrapperIdentity": false,
+    "reproducibleSecondRun": true
+  },
+  "offlineProbe": {
+    "attempts": 2,
+    "externalRequests": 2,
+    "blockedRequests": 2,
+    "passed": true
+  },
+  "frameIdentityProbe": {
+    "sameTarget": true,
+    "decoy": false,
+    "passed": true
+  },
+  "externalRequests": 2,
+  "blockedRequests": 2,
+  "checks": {
+    "uniqueHit": true,
+    "identityReproducible": true,
+    "offlineProbePassed": true
+  }
+}

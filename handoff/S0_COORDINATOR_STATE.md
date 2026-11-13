@@ -1,0 +1,44 @@
+# P022 S0 协调员状态（2026-11-10 ~14:33 GMT）
+
+- 工作目录：/home/hatch/workspace/p022-locatorstress/，git init，初始提交 9b3ba36（仅两份规格），无 remote。
+- 路线已核实：WorkBuddy /health ok + signed_in:true；deepseek-v4.1-flash 实测调用返回 OK。Chromium 缓存：chromium-1248、chromium-1254。Node v24.22.1、npm 10.9.4、Python 3.12.3、git 2.43.0。
+- T001 builder 已派发（新会话，agent 9189c60d）：环境 + LocatorSpec + Playwright Oracle baseline。验收：npm ci / npm run typecheck / npm run s0:locator-oracle。
+- T001 builder 汇报 PASS（2026-11-10 ~14:38 GMT）：Playwright 1.65.0 / Chromium 158.0.8127.18（revision 1254，缓存，无下载）；baseline 1/1、identityMatch=true、externalRequests=0；17 个文件 SHA-256 已记录。
+- 我亲自核验（干净状态 rm -rf dist node_modules 后重跑）：npm ci exit=0；typecheck exit=0；s0:locator-oracle exit=0，输出与 builder 一致；17 个 SHA-256 全部匹配（含 T001_BASELINE.json 15f9573a…，重跑字节一致）；读过 identity-compare.ts / oracle-runner.ts / browser.ts / locator-resolver.ts / target-capture.ts，符合规格 §5.1/§5.2；身份比较用页内 evaluate 比较 DOM 对象身份（probe 证明 Node 侧 wrapper === 恒 false），无 DOM 标记、无 CDP ID。
+- T001 独立评审已派发（另一新会话，只读，agent 885cca7e），等评审结论后提交。
+- T001 评审结论（2026-11-10 ~14:43 GMT）：STATUS FAIL，P0=0，P1=3，P2=7。评审逐项核对均有文件:行证据；我干净重跑的说法评审未独立验证（只读任务不重跑），但我的重跑日志在 /tmp/p022-t001-my-npm-ci.log、/tmp/p022-t001-my-typecheck.log、/tmp/p022-t001-my-oracle.log。
+- 协调员裁决：P1-1（离线拦截零运行时覆盖）、P1-2（跨 frame 身份比较未验证、无错误收容）、P1-3（校验失败标 INVALID_FIXTURE 应为 ERROR）必须修；P2-1/P2-2/P2-3/P2-4/P2-6-nth 空检查/P2-7 随本次一起修；P2-5（xpath/role/framePath/index 运行时覆盖）与 P2-6 剩余两项（engines 范围、frame-scope 非 iframe 校验）留待 T002/T011。另裁决：captureOriginalTarget 抛错 → INVALID_FIXTURE（§5.4）。
+- FIX-T001 已派发（新会话，agent 958e172c）。修完后我亲自重跑全部验收命令，再派聚焦复审，通过后才提交 T001；T002 仍锁定。
+- FIX-T001 汇报 PASS（2026-11-10 ~14:51 GMT）：offlineProbe 2/2/2 passed、frameIdentityProbe sameTarget=true decoy=false、baseline 1/1；P1-1/P1-2/P1-3 与 P2-1/P2-2/P2-3/P2-4/P2-6-nth/P2-7 逐项有证据；中间迭代一次 FAIL（探针双重计数 3/3）已修复。诚实局限：isSameElement→ERROR 分支未端到端触发（竞态窗口，代码已审查 + 脱离后抛错已实测）、browser.version() 断言未负向触发、nth 空检查未运行时触发；P2-5 与 P2-6 剩余两项留待 T002/T011。
+- 我亲自核验（干净状态 rm -rf dist node_modules 后重跑）：npm ci exit=0；typecheck exit=0；s0:locator-oracle exit=0，输出与施工方逐行一致；8 个改动文件 SHA-256 全部匹配（含 T001_BASELINE.json caf86d7f…，重跑字节一致）；读过 oracle-runner.ts 两处 try/catch（capture 抛错→INVALID_FIXTURE + originalCaptured:false；isSameElement 抛错→ERROR + identityMatch:null）；grep 确认 scripts/src/evidence 无 data-testid。
+- T001 聚焦复审已派发（另一新会话，只读，agent 15853a5f），等结论后提交 T001。
+- T001 复审结论（2026-11-10 ~14:54 GMT）：STATUS PASS，P0=0，P1=0，P2=6（全部非阻塞）。复审独立实测：P1-1 探针无假阳性路径；P1-2 capture→INVALID_FIXTURE 分支已端到端验证，frame detach 抛错已独立实测；P1-3 空 selector → ERROR 已实测；typecheck exit 0。
+- 协调员裁决：(1) isSameElement→ERROR 分支接受“代码审查 + 抛错前提实测”作为修好，不强制 T001 内造导航 harness；端到端触发作为 T002 回归用例（capture 后 detach frame 再 compare）。(2) P2-C（非 nth 分支 null handle）授权 T002 小修（resolver 3 行，统一为 MISSING）；P2-D（“外部请求 0”措辞 → “外部请求逃逸 0”）记为规格措辞项，留待 T013/T014 评审处理，不做代码任务。P2-5 与 P2-6 剩余两项仍留待 T002/T011。
+- T001 已提交：c3aaa15（17 文件，2397 行，工作树干净）。
+- T002 builder 已派发（新会话，agent 81848e02）：24 fixtures + M01–M08 + 192 用例 + expected-verdicts.json。验收：npm run test:s0:fixtures / npm run test:s0:mutations。
+- T002 builder 汇报 PASS（2026-11-10 ~15:22 GMT）：fixture 24/24、baseline 24/24、192/192 与 golden 一致；四态 STABLE 138 / WRONG_TARGET 22 / AMBIGUOUS 17 / MISSING 15；控制组稳定/脆弱各 96 pairs 零误报；P2-5 覆盖（framePath 3 fixtures/24 cases、index 4/32、两层 framePath F021）；P2-A 回归通过（累计 3 次）；P2-C 已改。诚实记录：首轮 184/192，8 条 golden 推导错误已修正（非迎合实现，理由在 T002_GOLDEN_DERIVATION.py）；P2-A 是时序扫掠、单次约 25–47s；F023 manifest 路径曾错已修正；M08 全 fixtures 不同步 aria-label。
+- 我亲自核验：typecheck exit=0；s0:locator-oracle exit=0（T001 回归 PASS）；test:s0:fixtures exit=0（3/3，24/24 baseline）；test:s0:mutations exit=0（3/3，192/192 golden 匹配，P2-A 48s 触发 ERROR，耗时 51.37s）；5 个关键文件 SHA-256 全部匹配；报告计数逐项与文件一致；git diff 确认 P2-C 仅授权 3 行、package.json 仅加 2 脚本；grep 确认 fixture 无 data-testid 锚点（仅 manifest.ts 有禁止该串的守卫）、golden+报告无绝对路径/时钟/UUID。抽查 F004 M06（`>` 不跨 shadow 边界 → MISSING）与 F010 M06（pierce 后 light-DOM 优先 → WRONG_TARGET）理由具体可核。
+- T002 独立评审已派发（另一新会话，只读，agent 5a519fec），重点是 8 条 golden 修正是否合规。等结论后提交 T002。
+- T002 评审结论（2026-11-10 ~15:29 GMT）：STATUS PASS，P0=0，P1=0，P2=4（全部非阻塞）。评审自写 Playwright 探针独立复核 8 条 golden 修正，全部确认为“推导本来就错、实现按规格正确”，非迎合实现；另抽查 13 条未修正 golden 全部正确；derivation 脚本重跑输出 SHA 与提交文件一致（fa80e27a…）；评审亲自重跑全部验收命令 exit 0，T002 报告重跑字节一致。P2：P2-1（M08 同步决定未按 fixture 显式记录）、P2-2（P2-A 时序扫掠风险与耗时）、P2-3（node-builtins.d.ts 部分存根）、P2-4（derivation 脚本 docstring 路径不符）。
+- 协调员裁决：(1) P2-2：P2-A 只在主 gate 跑一次，绝对不进 100 次重放循环。(2) P2-1：维持“全 fixtures 不同步 aria-label”为 S0 冻结决定，在 T003 gate 报告 notes 中显式记录；manifest 字段留待 T011/T013。(3) P2-4 留待 T011/T013，T003 不动 T002 证据。
+- T002 已提交：6c60956（72 文件，5336 行，工作树干净）。
+- T003 builder 已派发（新会话，agent 0b691402）：s0:gate 编排 + 100 次 hash 重放 + 四个 hash + S0 报告。验收：npm run s0:gate。100 次重放 = 100 次完整重执行确定性分析（约 40 分钟），P2-A 只跑一次。
+- T003 builder 汇报 PASS（2026-11-10 ~16:13 GMT）：gate_sha256 db1fd735…；两轮完整 gate 均 PASS 且 hash 相同；baseline 24/24、192/192、脆弱 96/96 检出、稳定误报 0/96、Oracle parity 192/192、四态 138/22/17/15、100 次重放 1 个唯一 hash 且与主 gate 相同、外部逃逸 0；每轮约 16 分钟（主分析 ~11s + P2-A ~31–51s + 重放 ~15 分钟）。诚实记录：冒烟测试发现并修复 2 处计数 bug（index 误计 24/192→4/32、stable/fragile fixtures 硬编码 24→实计 12/12，旧 hash b3fd44ba… 已废弃）；S0_GATE.json 未内嵌 environment 对象（hash 输入含它，复算需另取三值，T006 正式 canonical 待 S1）；S0_P2A.log 含 vitest 墙上时钟行（子进程日志，非规范 JSON）；第一轮后台运行未直接捕获 $?，第二轮捕获 GATE_EXIT_CODE=0。
+- 我已核查：git status 只有预期改动；git diff 确认受保护文件（fixtures/mutations/contracts/T002 证据）零改动；S0_GATE.json 逐项读过，计数与 hash 与施工方一致。
+- 我本人的 `npm run s0:gate` 完整重跑已完成（2026-11-10 ~16:30 GMT，耗时 928 秒）：exit=0，GATE PASS，gate_sha256 db1fd735… 与施工方两轮完全相同；S0_GATE.json / S0_GATE.log / S0_REPEAT_HASH.json / S0_REPEAT_HASH.log / 两脚本 / package.json 的 SHA-256 全部与施工方汇报一致（字节相同）；唯一不同的是 S0_P2A.log（vitest 原始输出含墙上时钟与耗时，属子进程日志、非规范证据，预期每次不同）。关键字段已从重跑后的文件复核：baseline 24、cases 192/192、parity 192/192 零 mismatch、稳定 0/96、脆弱 96/96、四态 138/22/17/15、外部 0、重放 100 次 1 个唯一 hash 且与主 gate 相同。
+- T003 独立评审已派发（另一新会话，只读，agent 4d8f080e；已告知不得运行 gate、只读 + typecheck）。等评审结论后提交 T003。
+- T003 评审结论（2026-11-10 ~16:21 GMT）：STATUS FAIL，P0=0，P1=1（仅 P1-1），P2=11。评审独立复算四个 hash 与施工方逐字符一致（联合佐证全部计数值）；亲自重跑 typecheck exit 0；核对 S0_REPEAT_HASH.json 100 个 hash 全等；P2-A 确不在重放循环内。P1-1：buildGateCanonicalObject 把 environment 混入 gate hash 输入，违反项目书 §6“环境版本不得混入规范哈希”，且 GateReport 无 environment 字段、仅凭报告无法复算。评审的开放问题 2 已由我的重跑回答（最终 S0_GATE.json：result PASS、p2a {ran:true, status:"PASS", exitCode:0}、gate_sha256 仍为 db1fd735…）；问题 3（第一轮未捕获 $?）协调员接受评审“可接受”的判定。
+- 协调员裁决：P1-1 必须修（从 hash 输入删 environment，报告内 hash 外保留；旧 hash db1fd735… 作废；新 hash 须仅凭 S0_GATE.json 可复算）；P2-1/P2-3（仅写日志）/P2-4/P2-5/P2-6/P2-8/P2-9 随本次一起修；P2-2/P2-7/P2-10/P2-11 留待 T006/T011/T013。
+- FIX-T003 已派发（新会话，agent 3214b9cd）。修完后我亲自重跑全部验收命令（含完整 gate 约 16 分钟），再派聚焦复审，通过后才提交 T003。
+- FIX-T003 汇报 PASS（2026-11-10 ~17:03 GMT）：新 gate_sha256 651c3fd4…（旧 db1fd735… 作废）；scenario/oracle/analysis 三 hash 不变；仅凭 S0_GATE.json 复算 MATCH: True；typecheck 与 typecheck:scripts 均 exit 0；完整 gate exit 0（888 秒）。诚实记录：首次 gate 尝试因沙箱瞬时故障失败（16:37–16:39，Chromium SIGTRAP、文件写 EPERM、内存压力，约 16:46 恢复），第二次运行通过，最终证据全部来自第二次运行；typecheck:scripts 的 dist 导入按未类型化 JS 解析（已知局限）；P2-3/P2-4 新防御分支与 P2-8 GATE_ERROR 路径本次未触发，以代码检查为准。
+- 我亲自核验：10 个文件 SHA-256 全部与施工方一致；新 S0_GATE.json 逐项读过（environment 为 hash 外字段、gate 651c3fd4…、三 hash 不变、全部硬门数字不变、P2-A PASS、重放 100 次 1 hash）；复算脚本已读过（只读 S0_GATE.json）并亲自跑过，MATCH: True，旧 hash 已作废。
+- 我本人的验收重跑已在后台进行（session proc_84f460cf51da：typecheck + typecheck:scripts + 完整 s0:gate 约 15 分钟），等结果自动送达。
+- 我的重跑完成（2026-11-10 ~17:20 GMT，耗时 996 秒）：typecheck exit=0、typecheck:scripts exit=0、s0:gate exit=0，GATE PASS，gate_sha256 651c3fd4… 与 FIX 施工方完全相同；9 个文件 SHA-256 全部与施工方汇报一致（字节相同）；复算脚本再次跑过，MATCH: True（仅凭 S0_GATE.json）。
+- T003 聚焦复审已派发（另一新会话，只读，agent f0905652；已告知不得运行 gate）。等评审结论后提交 T003。
+- 待办：T001 完成后派独立评审（另一新会话，只读）→ 我亲自重跑全部验收命令 → 提交 → T002 → T003 → 向主控汇报证据原文。
+- S0 硬门：npm run s0:gate 退出 0；24/24 baseline；192/192；预植入失败 100% 检出；稳定控制误报 ≤2%；Oracle parity 100%；四态各 ≥8 golden；100 次 1 个 gate hash；外部网络 0。
+
+- T003 复审结论（2026-11-10 ~17:22 GMT）：STATUS PASS，P0=0，P1=0，P2=6（全部非阻塞）。复审独立复算新 gate hash MATCH: True；亲自跑 typecheck 与 typecheck:scripts 均 exit 0；核对 S0_REPEAT_HASH.json 100 个 hash 全等；确认 P2-1～P2-9 逐项修好。P2-A（首次失败无存活日志）与 P2-C（三 hash“不变”无旧文件可直接 diff）请协调员裁决是否接受为非阻塞记录。
+- 协调员裁决：P2-A 与 P2-C 均接受为非阻塞记录。P2-A：失败说法时间线自洽（VM 已知有 EPERM 存储抖动与内存压力），最终证据来自两次独立完整通过的 gate 运行，不受影响。P2-C：协调员本人在修复前后分别读过新旧两份 S0_GATE.json 全文（旧三 hash 1ffb5f85…/3502d81f…/4410d5c8… 与新文件一致），属直接验证；且修复逻辑上不可能改变三 hash（canonical 对象不含 environment，src/ 与 T002 报告未动）。
+- T003 已提交：8fd04fb（11 文件，工作树干净）。
+- **S0 = PASS。** 全部硬门通过，T001–T003 均已提交（c3aaa15 / 6c60956 / 8fd04fb）。最终 gate_sha256 651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52（旧 db1fd735… 因 P1-1 修复作废）。T004–T014 仍锁定，待 S1 授权。

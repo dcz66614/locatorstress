@@ -1,0 +1,95 @@
+# FIX-R2-02 独立复审 — 接受日志（第 4 轮，复审员：全新会话，未碰过代码）
+# 基线 HEAD a834eea（git log 确认；工作树 clean，忽略 untracked coverage/、.tmp-gate-r2/、既往 REVIEW-ACCEPTANCE*.log）
+# 约束：只读产品代码与测试；只写 REVIEW.md + 本日志；不改任何产品代码/测试/证据。
+# /tmp 1%（511M 可用），gate 可直接跑；如满则改用工作区 TMPDIR。
+# 每步命令与结果逐条记录；既往复审员日志仅供参考数字，全部亲自重跑。
+
+## 0. 基线确认
+# $ git log --oneline -3
+# a834eea P022 R2 rework FIX-R2-02: CLI Run Store scenario fingerprint + ID isolation (closes P1-02)
+# 5316e54 P022 R2 rework FIX-R2-01 independent review: PASS (0/0/4, non-blocking P2s only)
+# 406c6d2 P022 R2 rework FIX-R2-01: structured HTML safety parsing + per-page JS-disabled CDP toggle for custom scenarios (closes P1-01)
+# $ git status --short: 仅 untracked coverage/、.tmp-gate-r2/、REVIEW-ACCEPTANCE-2.log、REVIEW-ACCEPTANCE-3.log、REVIEW-ACCEPTANCE.log、handoff/P022-FINAL-R2/
+# runs/ 现存 7 个 2026-11-11 旧实验文件（P022-CLI-LIVE.*、P022-CLI-REVIEW.*），无 runs/demo.json（R2 核实清理时已删，见 FIX-R2-02 REPORT §5）。
+
+## 1. build
+# $ npm run build  (tsc)
+# exit 0, no output.
+
+## 2. npm test
+# $ npm test  (vitest run --no-file-parallelism), start 23:13:05, duration 359.70s
+# Test Files 49 passed (49); Tests 630 passed (630); TEST_EXIT=0.
+# 含新增 tests/cli/run-store.test.ts 14 tests 与 FIX-R2-02 CLI describe 7 tests（均在 630 内）。
+
+## 2b. 测试后证据恢复
+# $ git checkout -- evidence/
+# 恢复后 git status 仅剩 untracked（coverage/、.tmp-gate-r2/、既往 REVIEW-ACCEPTANCE*.log、handoff/P022-FINAL-R2/），无 tracked 改动。
+# 冻结 SHA 核对（sha256sum）：
+#   evidence/s0/S0_GATE.json        15b5c2d5b4f995ffa40979101b94c21f4565617152dfc8f9ebf9b0e53cd3572d  MATCH
+#   evidence/s4/T012_PERF.json     b1838d3ff1c0a20d9f3961f58a7469bc451352d4c7c4ca01602101ba6f57e589  MATCH (b1838d3f…)
+#   evidence/s4/T012_E2E_REQUESTS.json 497de20a8405aadf8af3e689708e764c1f300d3e0afe36f539cc19779b206197 MATCH (497de20a…)
+#   evidence/s0/S0_P2A.log         2a76dec117c42ee2e5bfcf44b452407222658b3665c39dc47f0e21c957e06a5d  MATCH (2a76dec1…)
+
+## 3. test:mutation
+# $ npm run test:mutation (node scripts/t011-mutation-runner.mjs)
+# Mutation score: 40/40 = 100.0% (threshold 90%); Killed: 40, Survived: 0 [], Inconclusive: 0 [], Config errors: 0; MUT_EXIT=0.
+# 变异运行写了 evidence/s4/T011_MUTATION_RESULTS.json（设计内产物），跑后 git checkout -- evidence/ 恢复，S0_GATE.json sha 前 16 位仍为 15b5c2d5b4f995ffa。
+
+## 4. s0:gate
+# $ npm run s0:gate (build + node scripts/s0-gate.ts), duration ~955.8s
+# GATE PASS failure_type=null gate_sha256=651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52（与冻结值逐字相同）
+# REPEAT_HASH runs=100/100 unique_gate_hashes=1；P2A status=PASS exit=0；GATE_EXIT=0.
+# 跑后 git checkout -- evidence/ 恢复；S0_GATE.json / S0_P2A.log / T012_PERF.json / T012_E2E_REQUESTS.json 冻结 SHA 均核对无误（见上）。
+
+## 5. verify:all
+# $ npm run verify:all (node scripts/verify-all.mjs), duration 573.9s
+# verify:all PASSED — all 9 steps green (step 9/9: test:mutation 40/40 = 100.0%, 114.0s); VALL_EXIT=0.
+# 跑后 git checkout -- evidence/ 恢复（verify:all 内含测试重跑，改写了证据副产物；恢复后 tracked 无改动）。
+# 冻结 SHA 核对：S0_GATE.json 15b5c2d5b4f995ff…、S0_P2A.log 2a76dec117c42ee2…、T012_PERF.json b1838d3ff1c0a20d…、T012_E2E_REQUESTS.json 497de20a8405aadf… 均 MATCH。
+
+## 6. verify:review-pack
+# $ npm run verify:review-pack (node scripts/verify-review-pack.mjs), 证据恢复后跑
+# 4 个 FIX-R2-02 文件均 accepted as intentional FIX delta（run-store.ts / input.ts / analyze.ts / search.ts）；
+# 3 个 FIX-R2-01 文件亦 accepted（custom-scenario.ts / browser.ts / snapshot.ts）。
+# verify:review-pack FAILED (1 problem(s)):
+#   - sha256.txt: hash mismatch: scripts/verify-review-pack.mjs (not a known FIX delta)
+# 恰好 1 个已知问题：校验脚本自身的 hash（脚本无法自我登记，与 FIX-R2-01 同款；FIX-R2-03 重冻结时清除）。VRP_EXIT=1 为脚本汇报该问题的方式，非崩溃。
+# 跑前 git status 显示 verify:all 改写了 matrix-F002.png 与 T012_CUSTOM_E2E_REQUESTS.json（测试副产物）；已 git checkout -- evidence/ 恢复。
+
+## 7. GPT P1-02 原样活体复现（全部用 node dist/cli/index.js，dist 由本人 build，基线 a834eea；场景文件放 /tmp/p022-r2-02-review/，事后已删）
+# 场景格式与核实报告/测试套件一致：seed P022-LOCATORSTRESS-S0-2026-11-10；A = 两按钮 HTML + locator button.primary + target nth-child(1)；
+# B = 同 id、单 secondary 按钮 HTML；C1/C2 = 同 HTML、locator button.primary / button.secondary；demo = scenario_id "demo"。
+# 指纹期望值均用 dist/canonical/canonical-json.js 的 hashCanonical 独立算出，与导出文件逐字比对。
+#
+# (a) analyze 场景 A → search 同 id 改后 HTML：
+#   analyze exit 0，baseline verdict STABLE；runs/P022-R2-02-REVIEW-A.json keys=analysis,runId,scenario,scenario_sha256,schema；
+#   scenario_sha256=7278bd7389b83552f5d0a7c2c91a3cd8857a269b85c7cf73698d0c0baa28a1f1 == hashCanonical({kind:"custom",scenario:A}) 逐字相同。
+#   search B exit 0，witness status FOUND、depth-0 MISSING（与 GPT 原复现的 witness 一致）；
+#   导出文件 keys=runId,scenario,scenario_sha256,schema,witness —— analysis 字段已不存在（旧分析丢弃）；
+#   stored scenario html == B html；scenario_sha256=5a2c1c666c9d09b993578369c11a5df187dcd22b3d1fee72ba8f0814008f6912 == hashCanonical({kind:"custom",scenario:B}) 逐字相同。
+#   export --run P022-R2-02-REVIEW-A --format json exit 0：413 bytes，witness-only run，自洽，无 analysis。
+#   → GPT 原缺陷（场景 B + 分析 A + witness B 的自相矛盾导出）已消除。
+#
+# (c) 同 ID 换 Locator：analyze C1 (button.primary) exit 0 → search C2 (button.secondary) exit 0；
+#   导出文件 keys=runId,scenario,scenario_sha256,schema,witness；analysis 不存在；witness status FOUND、verdict WRONG_TARGET；
+#   stored locator == C2 locator；scenario_sha256 == hashCanonical({kind:"custom",scenario:C2})。
+#
+# (b) scenario_id "demo"：先 npm run demo 重建 runs/demo.json（exit 0；keys=report,runId,schema；report 存在；sha256 e33d8d4c20486b0a8329280588d082812735247951525fef8eac0058a1323b29）。
+#   analyze --scenario demo 文件：exit 1，ERROR RESERVED_RUN_ID: custom scenario_id "demo" is reserved ("demo", "t008" and fixture ids F001–F024 are owned by the demo command and the frozen fixtures); choose a different scenario_id
+#   search --scenario demo 文件：exit 1，同样的 RESERVED_RUN_ID。
+#   两次拒绝后 runs/demo.json sha256 仍为 e33d8d4c…（字节未变）。
+#
+# 第二道防线 REPORT_OVERWRITE_REFUSED（非保留 id 上已存完整报告）：
+#   预置 runs/P022-R2-02-REVIEW-R.json（含 report 字段，sha256 a0d13e77c52d14bba8d7aacc1246ca727850b282bc85ac0cae11eca8d6a4ebc6）；
+#   analyze 与 search 均 exit 1，ERROR REPORT_OVERWRITE_REFUSED: stored run P022-R2-02-REVIEW-R holds a complete report; analyze/search never overwrite a complete report (run "demo" to rebuild it, or export it first)；
+#   预置文件两次拒绝后 sha256 仍为 a0d13e77…（字节未变）。
+#
+# 正向控制（同场景重搜保留分析）：
+#   analyze K（与 A 同内容，id P022-R2-02-REVIEW-K）exit 0 → search 同场景 exit 0；
+#   导出文件 keys=analysis,runId,scenario,scenario_sha256,schema,witness；analysis 保留，baseline verdict STABLE；witness 存在；
+#   scenario_sha256 == hashCanonical({kind:"custom",scenario:K})。修复没有把“保留”逻辑一刀切掉。
+#
+# 清理：已删全部复现 run 文件（P022-R2-02-REVIEW-A.json + .export.json、-C.json、-K.json、-R.json、demo.json）与 /tmp/p022-r2-02-review/；
+# runs/ 恢复为复审前状态（7 个 2026-11-11 旧文件，无 demo.json）；git checkout -- evidence/ 恢复；
+# 最终 git status 仅剩 untracked（coverage/、.tmp-gate-r2/、既往 REVIEW-ACCEPTANCE*.log、handoff/P022-FINAL-R2/）；HEAD 仍为 a834eea；
+# S0_GATE.json sha 前 16 位 15b5c2d5b4f995ff。

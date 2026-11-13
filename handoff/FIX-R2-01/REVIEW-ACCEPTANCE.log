@@ -1,0 +1,87 @@
+=== REVIEWER ACCEPTANCE CHAIN start 2026-11-12T05:36:14Z ===
+--- build ---
+> locatorstress@0.1.0 build
+> tsc
+
+build-exit:0
+--- npm test ---
+[2m   Start at [22m 05:36:18
+[2m   Duration [22m 375.72s[2m (tests 94%, import 5%)[22m
+
+[2m    Isolate [22m [33m48 workers spawned[39m[2m · ~291ms startup each (spawn + environment, per file)[22m
+[2m            [22m [2mat least ~13.69s faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
+
+test-exit:0
+--- test:mutation ---
+
+Mutation score: 40/40 = 100.0% (threshold 90%)
+Killed: 40, Survived: 0 [], Inconclusive: 0 [], Config errors: 0
+Evidence written to /home/hatch/workspace/p022-locatorstress/evidence/s4/T011_MUTATION_RESULTS.json: true
+mutation-exit:0
+--- s0:gate ---
+=== REVIEWER CHAIN RESUMED after VM restart 2026-11-12T05:50:08Z (prior chain killed mid-gate) ===
+evidence-restored
+--- npm test (count capture) ---
+ [32m✓[39m tests/api/custom-scenario-r2-browser.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 2587[2mms[22m[39m
+   [32m✓[39m FIX-R2-01 live Chromium proof (P022-R2-P1-01) [2m(10)[22m
+     [33m[2m✓[22m[39m positive control: XPath and role locators still resolve[33m 513[2mms[22m[39m
+     [33m[2m✓[22m[39m no toggle leak: page timers fire and fixture analyze still works after custom runs[33m 354[2mms[22m[39m
+ [32m✓[39m tests/export/html-safety.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1971[2mms[22m[39m
+   [32m✓[39m offline HTML report in a real browser [2m(3)[22m
+     [33m[2m✓[22m[39m opens offline with zero non-file requests, zero dialogs, zero executable scripts[33m 855[2mms[22m[39m
+ [32m✓[39m tests/api/validate-http.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1662[2mms[22m[39m
+ [32m✓[39m tests/export/html-api.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m tests/api/server.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m tests/contracts/custom-scenario-r2.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/export/json-export.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m tests/export/ui-report-html.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/export/html-export.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m tests/api/routes-boundaries.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m tests/contracts/custom-scenario.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/search/bfs-determinism.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/analysis/witness-boundaries.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/api/custom-routes.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m48 passed[39m[22m[90m (48)[39m
+[2m      Tests [22m [1m[32m609 passed[39m[22m[90m (609)[39m
+[2m   Start at [22m 05:50:09
+[2m   Duration [22m 413.37s[2m (tests 96%, import 4%)[22m
+
+test-exit:0
+--- s0:gate ---
+REPEAT_HASH progress runs=70/100 unique_gate_hashes=1 gate_sha256=651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52
+REPEAT_HASH progress runs=80/100 unique_gate_hashes=1 gate_sha256=651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52
+REPEAT_HASH progress runs=90/100 unique_gate_hashes=1 gate_sha256=651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52
+REPEAT_HASH progress runs=100/100 unique_gate_hashes=1 gate_sha256=651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52
+REPEAT_HASH unique_gate_hashes=1 gate_sha256=651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52
+GATE PASS failure_type=null gate_sha256=651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52
+gate-exit:0
+--- verify:all ---
+KILLED M-RT-03 (HTML export regresses to 501 (FIX-R1-02 undone)) exit=1 failed=1 1970ms
+KILLED M-LC-01 (framePath cap 2 -> 3 (3-layer paths accepted)) exit=1 failed=1 755ms
+KILLED M-LC-02 (index must be > 0 (index 0 rejected)) exit=1 failed=2 799ms
+KILLED M-WN-01 (BOUNDED_NO_WITNESS meaning swapped with BOUNDED_INCOMPLETE) exit=1 failed=4 1082ms
+KILLED M-WN-02 (FOUND-with-null-witness invariant check removed) exit=1 failed=1 1089ms
+
+Mutation score: 40/40 = 100.0% (threshold 90%)
+Killed: 40, Survived: 0 [], Inconclusive: 0 [], Config errors: 0
+Evidence written to /home/hatch/workspace/p022-locatorstress/evidence/s4/T011_MUTATION_RESULTS.json: true
+--- step 9/9 passed: npm run test:mutation (72.0s)
+
+verify:all PASSED — all 9 steps green (555.5s total)
+verifyall-exit:0
+--- verify:review-pack ---
+note: src/ui/snapshot.ts: working-tree hash differs from the frozen value, but d26a3cc76b8e4da6cc92bc2c949101a69b179100:src/ui/snapshot.ts still matches it — accepted as the intentional FIX-R2-01 delta (snapshotCustom runs with page JavaScript disabled)
+note: src/api/service.ts: working-tree hash differs from the frozen value, but d26a3cc76b8e4da6cc92bc2c949101a69b179100:src/api/service.ts still matches it — accepted as the intentional FIX-R2-01 delta (custom analyze/search branches run with page JavaScript disabled)
+note: src/contracts/custom-scenario.ts: working-tree hash differs from the frozen value, but d26a3cc76b8e4da6cc92bc2c949101a69b179100:src/contracts/custom-scenario.ts still matches it — accepted as the intentional FIX-R2-01 delta (structured HTML safety parsing (tokenizer second pass) replacing regex-only validation)
+note: src/runner/browser.ts: working-tree hash differs from the frozen value, but d26a3cc76b8e4da6cc92bc2c949101a69b179100:src/runner/browser.ts still matches it — accepted as the intentional FIX-R2-01 delta (withPageJavaScriptDisabled CDP toggle for custom-scenario page work)
+note: src/ui/snapshot.ts: working-tree hash differs from the frozen value, but d26a3cc76b8e4da6cc92bc2c949101a69b179100:src/ui/snapshot.ts still matches it — accepted as the intentional FIX-R2-01 delta (snapshotCustom runs with page JavaScript disabled)
+
+verify:review-pack FAILED (1 problem(s)):
+  - sha256.txt: hash mismatch: scripts/verify-review-pack.mjs (not a known FIX delta)
+reviewpack-exit:1
+--- final status ---
+?? coverage/
+?? handoff/FIX-R2-01/REVIEW-ACCEPTANCE.log
+?? handoff/P022-FINAL-R2/
+=== CHAIN DONE ===

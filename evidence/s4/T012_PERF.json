@@ -1,0 +1,88 @@
+{
+  "schema": "locatorstress.t012-perf/v1",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10",
+  "generatedBy": "tests/e2e/performance.test.ts (T012)",
+  "environment": {
+    "node": "v24.22.1",
+    "chromium": "158.0.8127.18",
+    "playwright": "1.65.0",
+    "cpuModel": "AMD EPYC 9D25 126-Core Processor",
+    "cpuCount": 4,
+    "memoryTotalMiB": 7934,
+    "os": "linux x64"
+  },
+  "chromiumFirstLaunchMs": 883,
+  "chromiumFirstLaunchExcludedFromPerFixtureP95": true,
+  "matrix192": {
+    "samples": 3,
+    "totalsMs": [
+      6760,
+      5885,
+      5658
+    ],
+    "totalP95Ms": 6760,
+    "totalTargetMs": 60000,
+    "totalTargetMet": true,
+    "perFixtureP95Ms": 703,
+    "perFixtureTargetMs": 2000,
+    "perFixtureTargetMet": true,
+    "perFixtureSamples": 72,
+    "perCaseP95Ms": 101,
+    "perCaseMeanMs": 31.73,
+    "perRunTotals": [
+      {
+        "sample": 1,
+        "totalMs": 6760,
+        "mismatches": 0,
+        "slowestFixtureMs": 1157,
+        "slowestFixture": "F021"
+      },
+      {
+        "sample": 2,
+        "totalMs": 5885,
+        "mismatches": 0,
+        "slowestFixtureMs": 1100,
+        "slowestFixture": "F021"
+      },
+      {
+        "sample": 3,
+        "totalMs": 5658,
+        "mismatches": 0,
+        "slowestFixtureMs": 1202,
+        "slowestFixture": "F021"
+      }
+    ]
+  },
+  "bfsAlgorithmStub4096": {
+    "samples": 5,
+    "durationsMs": [
+      9,
+      12,
+      7,
+      9,
+      15
+    ],
+    "p95Ms": 15,
+    "targetMs": 5000,
+    "targetMet": true
+  },
+  "bfsRealBrowser4096": {
+    "durationMs": 122507,
+    "status": "BOUNDED_NO_WITNESS",
+    "statesEvaluated": 3761,
+    "statesExpanded": 1024,
+    "statesDeduplicated": 2123,
+    "uniqueStates": 1638,
+    "queueRemaining": 0,
+    "maxDepthReached": 6,
+    "target5sMet": false,
+    "targetMs": 5000,
+    "note": "F001 real-browser BFS exhausted the reachable state space inside the budget (BOUNDED_NO_WITNESS): dedup collapses the depth<=6 sequence tree (28,961 sequences) to 1,638 unique DOM states (measured this run; see statesEvaluated/statesExpanded above), so the 4096 expansion budget is unreachable on this 8-operator set. The cap itself is proven by the stub-evaluator test (BOUNDED_INCOMPLETE at exactly 4096). Duration recorded, not asserted against 5 s: one real-browser evaluation costs ~20-50 ms of Playwright round-trips. See ADR in T012_E2E_OFFLINE_PERF_REPORT.md."
+  },
+  "memory": {
+    "nodeRssPeakMiB": 217.6,
+    "targetMiB": 512,
+    "targetMet": true,
+    "note": "Vitest worker (Node) RSS sampled every 200 ms during the matrix runs. Chromium child-process RSS is not attributed separately by this harness."
+  }
+}

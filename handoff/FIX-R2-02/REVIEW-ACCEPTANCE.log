@@ -1,0 +1,62 @@
+=== reviewer acceptance chain start 2026-11-12T08:40:42Z ===
+--- build ---
+> tsc
+
+build-exit:0
+--- npm test ---
+
+[2m Test Files [22m [1m[32m49 passed[39m[22m[90m (49)[39m
+[2m      Tests [22m [1m[32m630 passed[39m[22m[90m (630)[39m
+[2m   Start at [22m 08:40:46
+[2m   Duration [22m 354.56s[2m (tests 96%, import 4%)[22m
+
+test-exit:0
+--- test:mutation ---
+
+Mutation score: 40/40 = 100.0% (threshold 90%)
+Killed: 40, Survived: 0 [], Inconclusive: 0 [], Config errors: 0
+Evidence written to /home/hatch/workspace/p022-locatorstress/evidence/s4/T011_MUTATION_RESULTS.json: true
+mutation-exit:0
+--- s0:gate ---
+REPEAT_HASH progress runs=40/100 unique_gate_hashes=1 gate_sha256=651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52
+REPEAT_HASH FAILED run=46 reason=exit code 1
+REPEAT_HASH FAILED run=46 reason=EPERM: operation not permitted, write
+Fatal: EPERM: operation not permitted, write
+gate-exit:1
+--- verify:all ---
+npm error If you believe this might be a permissions issue, please double-check the
+npm error permissions of the file and its containing directories, or try running
+npm error the command again as root/Administrator.
+npm error A complete log of this run can be found in: /home/hatch/.npm/_logs/2026-11-12T08_55_50_945Z-debug-0.log
+verifyall-exit:255
+--- verify:review-pack ---
+npm error
+npm error If you believe this might be a permissions issue, please double-check the
+npm error permissions of the file and its containing directories, or try running
+npm error the command again as root/Administrator.
+npm error A complete log of this run can be found in: /home/hatch/.npm/_logs/2026-11-12T08_55_51_141Z-debug-0.log
+reviewpack-exit:255
+--- restore evidence ---
+ M evidence/s0/S0_GATE.json
+ M evidence/s0/S0_GATE.log
+ M evidence/s0/S0_P2A.log
+ M evidence/s0/S0_REPEAT_HASH.json
+ M evidence/s0/T002_MUTATION_REPORT.json
+ M evidence/s1/T004_VERDICT_REPORT.json
+ M evidence/s1/T005_SCORE_REPORT.json
+ M evidence/s2/T007_BFS_BROWSER_SPOTCHECK.json
+ M evidence/s3/screenshots/matrix-F002.png
+ M evidence/s3/screenshots/narrow-390.png
+ M evidence/s3/screenshots/report-F002.png
+ M evidence/s3/screenshots/witness-F002.png
+ M evidence/s4/T011_MUTATION_RESULTS.json
+ M evidence/s4/T011_ORACLE_PARITY.json
+ M evidence/s4/T012_CUSTOM_E2E_REQUESTS.json
+ M evidence/s4/T012_E2E_REQUESTS.json
+ M evidence/s4/T012_PERF.json
+--- frozen SHA check ---
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/s0/S0_GATE.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/s4/T012_PERF.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/s4/T012_E2E_REQUESTS.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/s0/S0_P2A.log
+=== CHAIN DONE ===
