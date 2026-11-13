@@ -1,0 +1,14 @@
+{
+  "fixtureId": "F002",
+  "family": "form-submit",
+  "kind": "xpath",
+  "controlGroup": "fragile",
+  "locator": {
+    "kind": "xpath",
+    "selector": "/html/body/main/form/button[1]"
+  },
+  "privateTargetPath": "main > form > button:nth-child(2)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

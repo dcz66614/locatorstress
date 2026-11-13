@@ -1,0 +1,15 @@
+{
+  "fixtureId": "F016",
+  "family": "toolbar-menu",
+  "kind": "css",
+  "controlGroup": "fragile",
+  "locator": {
+    "kind": "css",
+    "selector": "div.toolbar > button",
+    "index": 0
+  },
+  "privateTargetPath": "main > div.toolbar > button:nth-child(1)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

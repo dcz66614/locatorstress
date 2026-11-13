@@ -1,0 +1,25 @@
+
+> locatorstress@0.1.0 test:e2e
+> npm run build && vitest run tests/e2e/e2e-main-flow.test.ts
+
+
+> locatorstress@0.1.0 build
+> tsc
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/home/hatch/workspace/p022-locatorstress[39m
+
+ [32m✓[39m tests/e2e/e2e-main-flow.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 11107[2mms[22m[39m
+   [32m✓[39m T012 E2E main flow (real Chromium) [2m(7)[22m
+     [33m[2m✓[22m[39m full flow F002: select -> validate/preview -> diff -> matrix -> witness -> report[33m 3231[2mms[22m[39m
+     [33m[2m✓[22m[39m downloaded UI JSON matches the frozen backend /api/analyze + /api/search field by field[33m 360[2mms[22m[39m
+     [33m[2m✓[22m[39m full flow F001: all-STABLE fixture scores 100 and exports 8 STABLE cases[33m 756[2mms[22m[39m
+     [33m[2m✓[22m[39m keyboard only: Tab/Enter select F003, ArrowRight tabs, Enter runs matrix + BFS + download[33m 3279[2mms[22m[39m
+     [33m[2m✓[22m[39m keyboard: ArrowLeft wraps back through tabs and Shift+Tab moves focus backwards[33m 1371[2mms[22m[39m
+     [33m[2m✓[22m[39m invalid locator draft is stopped client-side and the server stays alive[33m 303[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 06:16:10
+[2m   Duration [22m 11.77s[2m (tests 96%, import 3%)[22m
+

@@ -1,0 +1,17 @@
+frozen S0_GATE.json hashes:
+  analysis_sha256 = 4410d5c85cf5fe8ee858c4e01822cdbc1515c39afa7ba40d833aceb00a9576a4
+  gate_sha256 = 651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52
+  oracle_result_sha256 = 3502d81fa730605dd85548e39af6b7272015c026e65f91a2dae132c3e345a988
+  scenario_sha256 = 1ffb5f85561c6dd9f10fc15773097691c5c07fe20c6e9a001e231a41b61c9f22
+S0_GATE.json file sha256: 15b5c2d5b4f995ffa40979101b94c21f4565617152dfc8f9ebf9b0e53cd3572d
+scenario recomputed = 1ffb5f85561c6dd9f10fc15773097691c5c07fe20c6e9a001e231a41b61c9f22  match=True
+oracle recomputed   = 3502d81fa730605dd85548e39af6b7272015c026e65f91a2dae132c3e345a988  match=True
+  T002 actualVerdict vs golden mismatches: 0 (expect 0)
+analysis recomputed = 4410d5c85cf5fe8ee858c4e01822cdbc1515c39afa7ba40d833aceb00a9576a4  match=True
+gate recomputed     = 651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52  match=True
+T008 scenario_sha256 recomputed=1ffb5f85561c6dd9f10fc15773097691c5c07fe20c6e9a001e231a41b61c9f22 match=True
+T008 oracle_result_sha256 recomputed=3502d81fa730605dd85548e39af6b7272015c026e65f91a2dae132c3e345a988 match=True
+T008 analysis_sha256 recomputed=7c2e3434f82975bdff22d1791dc3f51913233a84f00ded2345b88bfd713a35f8 match=True
+T008 gate_sha256 recomputed=5e9707f7b0daf1c87801048554557234c62d8f333a82fc5f5ebc5043d2096634 match=True
+T008 embedded-canonical recomputation all match: True
+S0 FOUR HASHES ALL MATCH: True

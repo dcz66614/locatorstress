@@ -1,0 +1,14 @@
+{
+  "fixtureId": "F004",
+  "family": "search-box",
+  "kind": "css",
+  "controlGroup": "fragile",
+  "locator": {
+    "kind": "css",
+    "selector": "form.search > button.primary"
+  },
+  "privateTargetPath": "main > form.search > button:nth-child(2)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

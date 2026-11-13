@@ -1,0 +1,17 @@
+{
+  "fixtureId": "F024",
+  "family": "open-shadow-dom",
+  "kind": "role",
+  "controlGroup": "stable",
+  "locator": {
+    "kind": "role",
+    "role": "button",
+    "name": "Save document",
+    "exact": true
+  },
+  "privateTargetPath": "button:nth-child(1)",
+  "captureMode": "shadow",
+  "shadowHost": "div.shadow-host",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

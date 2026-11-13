@@ -1,0 +1,12 @@
+npm run typecheck
+npm run typecheck:scripts
+npm run build
+npm test
+npm run test:oracle
+npm run test:e2e
+npm run test:offline
+npm run test:stress
+npm run s0:gate
+# 未跑：npm run test:performance（会重写 evidence/s4 性能证据；性能结论以 S4 已验证数字为准）
+# 不存在故未跑：npm run verify:review-pack
+# 不存在故未跑：npm run verify:all

@@ -1,0 +1,16 @@
+{
+  "fixtureId": "F003",
+  "family": "form-submit",
+  "kind": "role",
+  "controlGroup": "stable",
+  "locator": {
+    "kind": "role",
+    "role": "button",
+    "name": "Submit form",
+    "exact": true
+  },
+  "privateTargetPath": "main > form > button:nth-child(2)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

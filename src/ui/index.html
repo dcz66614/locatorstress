@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LocatorStress — 定位器压力台</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="app-header">
+  <h1>LocatorStress <span class="subtitle">定位器压力台</span></h1>
+  <p class="tagline">合成页面 × 确定性 DOM 变异 × Playwright 真实执行 × 元素身份 Oracle — 只展示后端算好的 verdict / 分数 / 见证，不在前端重新计算。</p>
+  <p class="health" id="health-status" aria-live="polite">正在连接本地 API…</p>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="视图">
+  <button role="tab" id="tab-fixtures" aria-selected="true" aria-controls="view-fixtures" data-view="fixtures">Fixture Lab</button>
+  <button role="tab" id="tab-locator" aria-selected="false" aria-controls="view-locator" data-view="locator">Locator 编辑</button>
+  <button role="tab" id="tab-mutations" aria-selected="false" aria-controls="view-mutations" data-view="mutations">Mutation Lab</button>
+  <button role="tab" id="tab-matrix" aria-selected="false" aria-controls="view-matrix" data-view="matrix">Verdict Matrix</button>
+  <button role="tab" id="tab-witness" aria-selected="false" aria-controls="view-witness" data-view="witness">BFS Witness</button>
+  <button role="tab" id="tab-report" aria-selected="false" aria-controls="view-report" data-view="report">Report</button>
+</nav>
+
+<main>
+  <p id="run-status" class="status" aria-live="polite"></p>
+  <p id="selected-fixture" class="selected-fixture" aria-live="polite">未选择 fixture。</p>
+
+  <!-- 1. Fixture Lab -->
+  <section id="view-fixtures" role="tabpanel" aria-labelledby="tab-fixtures">
+    <h2>Fixture Lab — 24 个合成页面</h2>
+    <p>固定 seed：<code id="seed-text">—</code>。每页 baseline 必须唯一命中原目标；稳定控制 12 / 脆弱控制 12；CSS / XPath / role 各 8。</p>
+    <div class="filters">
+      <label>Locator 类型
+        <select id="fixture-filter-kind">
+          <option value="">全部</option>
+          <option value="css">css</option>
+          <option value="xpath">xpath</option>
+          <option value="role">role</option>
+        </select>
+      </label>
+      <label>控制组
+        <select id="fixture-filter-control">
+          <option value="">全部</option>
+          <option value="stable">stable</option>
+          <option value="fragile">fragile</option>
+        </select>
+      </label>
+      <label>页面家族
+        <select id="fixture-filter-family">
+          <option value="">全部</option>
+        </select>
+      </label>
+    </div>
+    <p id="fixture-count" aria-live="polite"></p>
+    <table id="fixture-table">
+      <thead><tr><th scope="col">Fixture</th><th scope="col">家族</th><th scope="col">Locator 类型</th><th scope="col">控制组</th><th scope="col">Locator</th></tr></thead>
+      <tbody id="fixture-rows"></tbody>
+    </table>
+    <p class="hint">点击一行选择 fixture；Locator 列显示该 fixture 的冻结 Locator（内置模式下分析使用它；自定义输入模式下，分析使用你在 Locator 编辑页输入的 HTML 与 Locator）。</p>
+  </section>
+
+  <!-- 2. Locator 编辑 -->
+  <section id="view-locator" role="tabpanel" aria-labelledby="tab-locator" hidden>
+    <h2>Locator 编辑</h2>
+    <p id="loc-fixture-note">先在 Fixture Lab 选择一个 fixture，这里载入它的冻结 Locator 供编辑与校验。</p>
+    <p class="hint">内置模式下，分析使用所选 fixture 的冻结 Locator；自定义输入模式下，分析使用本页编辑的合成 HTML、LocatorSpec 与私有目标描述（目标描述只供 Oracle 定位原目标，不会暴露给被测 Locator）。本页只做两件事：① 用后端 <code>/api/validate</code> 校验编辑后的 LocatorSpec 或自定义场景语法；② 在浏览器内预览它在原始 DOM 上的匹配情况（匹配计数与是否命中同一元素，仅为预览，不计算 verdict）。空必填字段等格式问题先由格式检查拦下（不发送给后端）；通过格式检查的草稿一律发给后端校验。本工具不提供自动生成、推荐或修复 Locator 的功能。</p>
+    <div class="form-row" role="radiogroup" aria-label="输入来源">
+      <label><input type="radio" name="input-mode" id="mode-fixture" value="fixture" checked> 内置 fixture（分析使用所选 fixture 的冻结 HTML 与 Locator）</label>
+      <label><input type="radio" name="input-mode" id="mode-custom" value="custom"> 自定义输入（分析使用我编辑的 HTML 与 Locator）</label>
+    </div>
+    <div id="custom-fields" hidden>
+      <div class="form-row">
+        <label for="custom-scenario-id">scenario_id（1–64 字符，可留空表示 custom）</label>
+        <input id="custom-scenario-id" type="text" autocomplete="off" spellcheck="false" placeholder="P022-CUSTOM-001">
+      </div>
+      <div class="form-row">
+        <label for="custom-html">合成 HTML（仅合成内容：不允许 script、外部 URL、事件属性；最多 128 KiB）</label>
+        <textarea id="custom-html" rows="6" spellcheck="false"></textarea>
+      </div>
+      <div class="form-row">
+        <label for="custom-target-css">目标选择器 target.css（私有：只供 Oracle 定位原目标，不会暴露给被测 Locator，必须恰好命中一个元素）</label>
+        <input id="custom-target-css" type="text" autocomplete="off" spellcheck="false" placeholder="main > form > button:nth-child(1)">
+      </div>
+      <div class="form-row">
+        <label for="custom-target-framepath">目标 framePath（可选：目标在 iframe 内时，每行一个 iframe CSS selector）</label>
+        <textarea id="custom-target-framepath" rows="2" spellcheck="false"></textarea>
+      </div>
+      <div class="form-row">
+        <label for="custom-target-shadow">目标 shadowHost（可选：目标在 open ShadowRoot 内时，填宿主元素的 CSS selector）</label>
+        <input id="custom-target-shadow" type="text" autocomplete="off" spellcheck="false">
+      </div>
+      <p class="hint">目标描述必须在你的 HTML 上恰好命中一个元素；命中 0 个或多个时分析拒绝运行（422），不会悄悄改用 fixture 定位器。</p>
+      <div class="form-actions">
+        <button type="button" id="custom-validate">校验自定义场景</button>
+        <button type="button" id="custom-reset">恢复示例自定义输入</button>
+      </div>
+      <div id="custom-validate-result" aria-live="polite"></div>
+    </div>
+    <form id="locator-form">
+      <div class="form-row">
+        <label for="loc-kind">kind</label>
+        <select id="loc-kind">
+          <option value="css">css</option>
+          <option value="xpath">xpath</option>
+          <option value="role">role</option>
+        </select>
+      </div>
+      <div class="form-row" id="row-selector">
+        <label for="loc-selector">selector</label>
+        <input id="loc-selector" type="text" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="form-row" id="row-role" hidden>
+        <label for="loc-role">role</label>
+        <input id="loc-role" type="text" autocomplete="off" spellcheck="false" placeholder="button / link / textbox …">
+      </div>
+      <div class="form-row" id="row-name" hidden>
+        <label for="loc-name">name（accessible name，字符串）</label>
+        <input id="loc-name" type="text" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="form-row">
+        <label><input id="loc-exact" type="checkbox"> exact（role name 精确匹配）</label>
+        <label><input id="loc-include-hidden" type="checkbox"> includeHidden</label>
+      </div>
+      <div class="form-row">
+        <label for="loc-framepath">framePath（0–2 层 iframe CSS selector，每行一个）</label>
+        <textarea id="loc-framepath" rows="2" spellcheck="false"></textarea>
+      </div>
+      <div class="form-row">
+        <label for="loc-index">index（可选 .nth(index)，0-based；留空表示无）</label>
+        <input id="loc-index" type="number" min="0" step="1" placeholder="留空">
+      </div>
+      <div class="form-actions">
+        <button type="button" id="loc-validate">校验 LocatorSpec</button>
+        <button type="button" id="loc-preview">浏览器内匹配预览</button>
+        <button type="button" id="loc-reset">恢复 fixture 冻结 Locator</button>
+      </div>
+    </form>
+    <div id="loc-validate-result" aria-live="polite"></div>
+    <div id="loc-preview-result" aria-live="polite"></div>
+  </section>
+
+  <!-- 3. Mutation Lab -->
+  <section id="view-mutations" role="tabpanel" aria-labelledby="tab-mutations" hidden>
+    <h2>Mutation Lab — M01–M08 与 DOM diff</h2>
+    <p class="hint">变异后 DOM 来自 UI 服务器：它在独立 Playwright 页面上用冻结的变异注册表真实执行算子并序列化 DOM（含 open ShadowRoot 内容），只作展示，不参与 verdict 计算。选择一个算子查看原始 DOM 与变异 DOM 的行级差异。</p>
+    <div id="mutation-list" class="mutation-list" role="group" aria-label="变异算子"></div>
+    <p id="diff-summary" aria-live="polite"></p>
+    <div id="diff-view" class="diff-view" aria-live="polite"></div>
+  </section>
+
+  <!-- 4. Verdict Matrix -->
+  <section id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
+    <h2>Verdict Matrix — 四态结果</h2>
+    <p class="hint">点击「运行分析」后，后端在真实 Chromium 上跑 baseline + M01–M08（共 9 次执行），返回四态 verdict。内置模式分析所选 fixture；自定义输入模式分析你在 Locator 编辑页输入的场景。WRONG_TARGET 表示“返回了一个元素，但不是原目标”。颜色不是唯一的状态通道：每个格子都写明 verdict 文字。</p>
+    <div class="form-actions">
+      <button type="button" id="run-analysis">运行分析（baseline + M01–M08）</button>
+    </div>
+    <p id="analysis-status" aria-live="polite"></p>
+    <div id="matrix-grid" class="matrix-grid" role="group" aria-label="verdict 矩阵"></div>
+    <div id="case-detail" class="case-detail" aria-live="polite"></div>
+  </section>
+
+  <!-- 5. BFS Witness -->
+  <section id="view-witness" role="tabpanel" aria-labelledby="tab-witness" hidden>
+    <h2>BFS Witness — 最短失败序列</h2>
+    <p class="hint">有界 BFS（深度 ≤ 6，状态 ≤ 4096）在后端运行；首个非 STABLE 序列即最短失败见证。BOUNDED_NO_WITNESS 只表示有限搜索内未找到，不证明所有 DOM 变化都安全；BOUNDED_INCOMPLETE 表示预算耗尽、搜索未完成，绝不是“无见证”。</p>
+    <div class="form-row">
+      <label for="bfs-depth">maxDepth（0–6）</label>
+      <input id="bfs-depth" type="number" min="0" max="6" step="1" value="2">
+      <label for="bfs-budget">maxExpandedStates（1–4096）</label>
+      <input id="bfs-budget" type="number" min="1" max="4096" step="1" value="4096">
+      <button type="button" id="run-bfs">运行 BFS</button>
+    </div>
+    <p id="witness-status" aria-live="polite"></p>
+    <div id="witness-summary" aria-live="polite"></div>
+    <div id="witness-steps" aria-live="polite"></div>
+  </section>
+
+  <!-- 6. Report -->
+  <section id="view-report" role="tabpanel" aria-labelledby="tab-report" hidden>
+    <h2>Report — 稳定性分数与导出</h2>
+    <p class="hint">分数 = 100 × STABLE 用例数 / 已完成用例数（合成变异集比例，不是生产失败概率）；incomplete 用例不计分但降低 coverage。分数与控制组指标由 UI 服务器调用冻结的 T005 计分模块算出，浏览器只展示。</p>
+    <div id="report-empty">还没有运行结果：先在 Verdict Matrix 运行分析（BFS 见证可选）。</div>
+    <div id="report-body" hidden>
+      <dl class="report-facts">
+        <div><dt>稳定性分数</dt><dd id="report-score">—</dd></div>
+        <div><dt>四态分布</dt><dd id="report-counts">—</dd></div>
+        <div><dt>Coverage（已完成 / 应完成）</dt><dd id="report-coverage">—</dd></div>
+        <div><dt>Baseline</dt><dd id="report-baseline">—</dd></div>
+        <div><dt>BFS 见证</dt><dd id="report-witness">—</dd></div>
+      </dl>
+      <h3>按算子分数</h3>
+      <table id="report-per-operator">
+        <thead><tr><th scope="col">算子</th><th scope="col">STABLE</th><th scope="col">WRONG_TARGET</th><th scope="col">AMBIGUOUS</th><th scope="col">MISSING</th><th scope="col">分数</th></tr></thead>
+        <tbody id="report-operator-rows"></tbody>
+      </table>
+      <h3>哈希（只读，来自后端报告文件）</h3>
+      <div id="report-hashes" aria-live="polite"></div>
+      <div class="form-actions">
+        <button type="button" id="download-json">下载本次分析 JSON</button>
+        <button type="button" id="download-html">下载本次分析 HTML</button>
+        <button type="button" id="clear-run">清空本地运行数据</button>
+      </div>
+      <p class="hint">HTML 下载与 JSON 下载是同一份本次分析（页面级导出，非 T008 全量报告）：离线可打开、无外部资源；完整 24-fixture 全量报告的 HTML 通过 <code>POST /api/export</code>（format=html）导出。</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>LocatorStress P022 · 本地工具，不连接外网；全部请求只走 loopback。合成数据，不证明真实用户价值（USER_VALUE_NOT_MEASURED）。</p>
+</footer>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>

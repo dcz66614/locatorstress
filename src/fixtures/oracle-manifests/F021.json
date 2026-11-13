@@ -1,0 +1,18 @@
+{
+  "fixtureId": "F021",
+  "family": "nested-iframe",
+  "kind": "role",
+  "controlGroup": "fragile",
+  "locator": {
+    "kind": "role",
+    "role": "button",
+    "name": "Save",
+    "exact": false,
+    "index": 0,
+    "framePath": ["iframe.frame-outer", "iframe.frame-inner"]
+  },
+  "privateTargetPath": "button:nth-child(1)",
+  "captureMode": "frame",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

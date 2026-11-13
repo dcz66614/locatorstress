@@ -1,0 +1,1158 @@
+{
+  "schema": "locatorstress.t002-expected-verdicts/v1",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10",
+  "cases": [
+    {
+      "fixtureId": "F001",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; css button[type=\"submit\"] still matches the same single node."
+    },
+    {
+      "fixtureId": "F001",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; css button[type=\"submit\"] keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F001",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; css button[type=\"submit\"] does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F001",
+      "mutationId": "M04",
+      "expectedVerdict": "STABLE",
+      "reason": "The M04 decoy copies tag/class/text/aria-label but not the attribute css button[type=\"submit\"] keys on, so the locator still matches only the original target."
+    },
+    {
+      "fixtureId": "F001",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so css button[type=\"submit\"] still matches only the original target."
+    },
+    {
+      "fixtureId": "F001",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so css button[type=\"submit\"] still finds the same node."
+    },
+    {
+      "fixtureId": "F001",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute css button[type=\"submit\"] keys on (and role locators exclude hidden nodes), so css button[type=\"submit\"] still matches only the original target."
+    },
+    {
+      "fixtureId": "F001",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; css button[type=\"submit\"] does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F002",
+      "mutationId": "M01",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M01 wraps the target in a div, so it is no longer a direct child; absolute XPath /html/body/main/form/button[1] now selects a sibling button instead of the original target, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F002",
+      "mutationId": "M02",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M02/M04/M07 moves a sibling or decoy into the position absolute XPath /html/body/main/form/button[1] selects, so the positional locator now matches a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F002",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; absolute XPath /html/body/main/form/button[1] does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F002",
+      "mutationId": "M04",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M02/M04/M07 moves a sibling or decoy into the position absolute XPath /html/body/main/form/button[1] selects, so the positional locator now matches a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F002",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so absolute XPath /html/body/main/form/button[1] still matches only the original target."
+    },
+    {
+      "fixtureId": "F002",
+      "mutationId": "M06",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M06 moves the target into an open shadow root; absolute XPath /html/body/main/form/button[1] cannot see it there, and now selects a remaining light-DOM sibling instead, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F002",
+      "mutationId": "M07",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M02/M04/M07 moves a sibling or decoy into the position absolute XPath /html/body/main/form/button[1] selects, so the positional locator now matches a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F002",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; absolute XPath /html/body/main/form/button[1] does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F003",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; role button name \"Submit form\" (aria-label) still matches the same single node."
+    },
+    {
+      "fixtureId": "F003",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; role button name \"Submit form\" (aria-label) keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F003",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; role button name \"Submit form\" (aria-label) does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F003",
+      "mutationId": "M04",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M04 inserts a visible decoy with the same tag/class/text/name before the target, so role button name \"Submit form\" (aria-label) now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F003",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so role button name \"Submit form\" (aria-label) still matches only the original target."
+    },
+    {
+      "fixtureId": "F003",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so role button name \"Submit form\" (aria-label) still finds the same node."
+    },
+    {
+      "fixtureId": "F003",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute role button name \"Submit form\" (aria-label) keys on (and role locators exclude hidden nodes), so role button name \"Submit form\" (aria-label) still matches only the original target."
+    },
+    {
+      "fixtureId": "F003",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; role button name \"Submit form\" (aria-label) does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F004",
+      "mutationId": "M01",
+      "expectedVerdict": "MISSING",
+      "reason": "M01 wraps the target in a div, so the direct-child/absolute css form.search > button.primary no longer matches; final count 0, MISSING."
+    },
+    {
+      "fixtureId": "F004",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; css form.search > button.primary keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F004",
+      "mutationId": "M03",
+      "expectedVerdict": "MISSING",
+      "reason": "M03 replaces the first class token that css form.search > button.primary keys on, so the locator no longer matches the target; final count 0, MISSING."
+    },
+    {
+      "fixtureId": "F004",
+      "mutationId": "M04",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M04 inserts a visible decoy with the same tag/class/text/name before the target, so css form.search > button.primary now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F004",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so css form.search > button.primary still matches only the original target."
+    },
+    {
+      "fixtureId": "F004",
+      "mutationId": "M06",
+      "expectedVerdict": "MISSING",
+      "reason": "M06 moves the target into an open shadow root; the direct-child combinator in css form.search > button.primary does not cross the shadow boundary (descendant matching pierces, '>' does not), so the locator matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F004",
+      "mutationId": "M07",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M07 inserts a hidden duplicate with the same tag/class/text before the target; CSS/XPath count hidden nodes, so css form.search > button.primary now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F004",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; css form.search > button.primary does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F005",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; XPath //button[@type='submit'] still matches the same single node."
+    },
+    {
+      "fixtureId": "F005",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; XPath //button[@type='submit'] keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F005",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; XPath //button[@type='submit'] does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F005",
+      "mutationId": "M04",
+      "expectedVerdict": "STABLE",
+      "reason": "The M04 decoy copies tag/class/text/aria-label but not the attribute XPath //button[@type='submit'] keys on, so the locator still matches only the original target."
+    },
+    {
+      "fixtureId": "F005",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so XPath //button[@type='submit'] still matches only the original target."
+    },
+    {
+      "fixtureId": "F005",
+      "mutationId": "M06",
+      "expectedVerdict": "MISSING",
+      "reason": "M06 moves the target into an open shadow root; the XPath engine does not pierce shadow roots, so XPath //button[@type='submit'] matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F005",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute XPath //button[@type='submit'] keys on (and role locators exclude hidden nodes), so XPath //button[@type='submit'] still matches only the original target."
+    },
+    {
+      "fixtureId": "F005",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; XPath //button[@type='submit'] does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F006",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; role button name \"Search site\" (aria-label) still matches the same single node."
+    },
+    {
+      "fixtureId": "F006",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; role button name \"Search site\" (aria-label) keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F006",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; role button name \"Search site\" (aria-label) does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F006",
+      "mutationId": "M04",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M04 inserts a visible decoy with the same tag/class/text/name before the target, so role button name \"Search site\" (aria-label) now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F006",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so role button name \"Search site\" (aria-label) still matches only the original target."
+    },
+    {
+      "fixtureId": "F006",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so role button name \"Search site\" (aria-label) still finds the same node."
+    },
+    {
+      "fixtureId": "F006",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute role button name \"Search site\" (aria-label) keys on (and role locators exclude hidden nodes), so role button name \"Search site\" (aria-label) still matches only the original target."
+    },
+    {
+      "fixtureId": "F006",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; role button name \"Search site\" (aria-label) does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F007",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; css a[href=\"/dashboard\"] still matches the same single node."
+    },
+    {
+      "fixtureId": "F007",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; css a[href=\"/dashboard\"] keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F007",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; css a[href=\"/dashboard\"] does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F007",
+      "mutationId": "M04",
+      "expectedVerdict": "STABLE",
+      "reason": "The M04 decoy copies tag/class/text/aria-label but not the attribute css a[href=\"/dashboard\"] keys on, so the locator still matches only the original target."
+    },
+    {
+      "fixtureId": "F007",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so css a[href=\"/dashboard\"] still matches only the original target."
+    },
+    {
+      "fixtureId": "F007",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so css a[href=\"/dashboard\"] still finds the same node."
+    },
+    {
+      "fixtureId": "F007",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute css a[href=\"/dashboard\"] keys on (and role locators exclude hidden nodes), so css a[href=\"/dashboard\"] still matches only the original target."
+    },
+    {
+      "fixtureId": "F007",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; css a[href=\"/dashboard\"] does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F008",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; XPath //a[@href='/dashboard'] still matches the same single node."
+    },
+    {
+      "fixtureId": "F008",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; XPath //a[@href='/dashboard'] keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F008",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; XPath //a[@href='/dashboard'] does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F008",
+      "mutationId": "M04",
+      "expectedVerdict": "STABLE",
+      "reason": "The M04 decoy copies tag/class/text/aria-label but not the attribute XPath //a[@href='/dashboard'] keys on, so the locator still matches only the original target."
+    },
+    {
+      "fixtureId": "F008",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so XPath //a[@href='/dashboard'] still matches only the original target."
+    },
+    {
+      "fixtureId": "F008",
+      "mutationId": "M06",
+      "expectedVerdict": "MISSING",
+      "reason": "M06 moves the target into an open shadow root; the XPath engine does not pierce shadow roots, so XPath //a[@href='/dashboard'] matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F008",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute XPath //a[@href='/dashboard'] keys on (and role locators exclude hidden nodes), so XPath //a[@href='/dashboard'] still matches only the original target."
+    },
+    {
+      "fixtureId": "F008",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; XPath //a[@href='/dashboard'] does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F009",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; role link name \"Dashboard\" (from text) still matches the same single node."
+    },
+    {
+      "fixtureId": "F009",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; role link name \"Dashboard\" (from text) keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F009",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; role link name \"Dashboard\" (from text) does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F009",
+      "mutationId": "M04",
+      "expectedVerdict": "STABLE",
+      "reason": "The M04 decoy is an <a> without href, so it has no link role; role link name \"Dashboard\" (from text) still matches only the original target."
+    },
+    {
+      "fixtureId": "F009",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so role link name \"Dashboard\" (from text) still matches only the original target."
+    },
+    {
+      "fixtureId": "F009",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so role link name \"Dashboard\" (from text) still finds the same node."
+    },
+    {
+      "fixtureId": "F009",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute role link name \"Dashboard\" (from text) keys on (and role locators exclude hidden nodes), so role link name \"Dashboard\" (from text) still matches only the original target."
+    },
+    {
+      "fixtureId": "F009",
+      "mutationId": "M08",
+      "expectedVerdict": "MISSING",
+      "reason": "M08 changes the target text; role link name \"Dashboard\" (from text) keys on the old text/accessible name, so it matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F010",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; css button.action with index 0 still matches the same single node."
+    },
+    {
+      "fixtureId": "F010",
+      "mutationId": "M02",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed css button.action with index 0 now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F010",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; css button.action with index 0 does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F010",
+      "mutationId": "M04",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed css button.action with index 0 now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F010",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so css button.action with index 0 still matches only the original target."
+    },
+    {
+      "fixtureId": "F010",
+      "mutationId": "M06",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M06 moves the target into an open shadow root; the engine pierces it, but a light-DOM match is yielded before the shadow match, so the indexed css button.action with index 0 picks the wrong node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F010",
+      "mutationId": "M07",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed css button.action with index 0 now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F010",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; css button.action with index 0 does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F011",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; XPath //button[text()='Confirm'] still matches the same single node."
+    },
+    {
+      "fixtureId": "F011",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; XPath //button[text()='Confirm'] keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F011",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; XPath //button[text()='Confirm'] does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F011",
+      "mutationId": "M04",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M04 inserts a visible decoy with the same tag/class/text/name before the target, so XPath //button[text()='Confirm'] now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F011",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so XPath //button[text()='Confirm'] still matches only the original target."
+    },
+    {
+      "fixtureId": "F011",
+      "mutationId": "M06",
+      "expectedVerdict": "MISSING",
+      "reason": "M06 moves the target into an open shadow root; the XPath engine does not pierce shadow roots, so XPath //button[text()='Confirm'] matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F011",
+      "mutationId": "M07",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M07 inserts a hidden duplicate with the same tag/class/text before the target; CSS/XPath count hidden nodes, so XPath //button[text()='Confirm'] now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F011",
+      "mutationId": "M08",
+      "expectedVerdict": "MISSING",
+      "reason": "M08 changes the target text; XPath //button[text()='Confirm'] keys on the old text/accessible name, so it matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F012",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; role button name \"Confirm deletion\" (aria-label) still matches the same single node."
+    },
+    {
+      "fixtureId": "F012",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; role button name \"Confirm deletion\" (aria-label) keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F012",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; role button name \"Confirm deletion\" (aria-label) does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F012",
+      "mutationId": "M04",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M04 inserts a visible decoy with the same tag/class/text/name before the target, so role button name \"Confirm deletion\" (aria-label) now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F012",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so role button name \"Confirm deletion\" (aria-label) still matches only the original target."
+    },
+    {
+      "fixtureId": "F012",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so role button name \"Confirm deletion\" (aria-label) still finds the same node."
+    },
+    {
+      "fixtureId": "F012",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute role button name \"Confirm deletion\" (aria-label) keys on (and role locators exclude hidden nodes), so role button name \"Confirm deletion\" (aria-label) still matches only the original target."
+    },
+    {
+      "fixtureId": "F012",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; role button name \"Confirm deletion\" (aria-label) does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F013",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; css button[type=\"submit\"] still matches the same single node."
+    },
+    {
+      "fixtureId": "F013",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; css button[type=\"submit\"] keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F013",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; css button[type=\"submit\"] does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F013",
+      "mutationId": "M04",
+      "expectedVerdict": "STABLE",
+      "reason": "The M04 decoy copies tag/class/text/aria-label but not the attribute css button[type=\"submit\"] keys on, so the locator still matches only the original target."
+    },
+    {
+      "fixtureId": "F013",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so css button[type=\"submit\"] still matches only the original target."
+    },
+    {
+      "fixtureId": "F013",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so css button[type=\"submit\"] still finds the same node."
+    },
+    {
+      "fixtureId": "F013",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute css button[type=\"submit\"] keys on (and role locators exclude hidden nodes), so css button[type=\"submit\"] still matches only the original target."
+    },
+    {
+      "fixtureId": "F013",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; css button[type=\"submit\"] does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F014",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; XPath //button with index 1 still matches the same single node."
+    },
+    {
+      "fixtureId": "F014",
+      "mutationId": "M02",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed XPath //button with index 1 now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F014",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; XPath //button with index 1 does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F014",
+      "mutationId": "M04",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed XPath //button with index 1 now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F014",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so XPath //button with index 1 still matches only the original target."
+    },
+    {
+      "fixtureId": "F014",
+      "mutationId": "M06",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M06 moves the target into an open shadow root; XPath does not pierce it, so XPath //button with index 1 matches only the remaining light-DOM buttons and the index picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F014",
+      "mutationId": "M07",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed XPath //button with index 1 now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F014",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; XPath //button with index 1 does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F015",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; role button name \"Edit\" (from text) still matches the same single node."
+    },
+    {
+      "fixtureId": "F015",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; role button name \"Edit\" (from text) keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F015",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; role button name \"Edit\" (from text) does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F015",
+      "mutationId": "M04",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M04 inserts a visible decoy with the same tag/class/text/name before the target, so role button name \"Edit\" (from text) now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F015",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so role button name \"Edit\" (from text) still matches only the original target."
+    },
+    {
+      "fixtureId": "F015",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so role button name \"Edit\" (from text) still finds the same node."
+    },
+    {
+      "fixtureId": "F015",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute role button name \"Edit\" (from text) keys on (and role locators exclude hidden nodes), so role button name \"Edit\" (from text) still matches only the original target."
+    },
+    {
+      "fixtureId": "F015",
+      "mutationId": "M08",
+      "expectedVerdict": "MISSING",
+      "reason": "M08 changes the target text; role button name \"Edit\" (from text) keys on the old text/accessible name, so it matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F016",
+      "mutationId": "M01",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M01 wraps the target in a div, so it is no longer a direct child; css div.toolbar > button with index 0 now selects a sibling button instead of the original target, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F016",
+      "mutationId": "M02",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed css div.toolbar > button with index 0 now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F016",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; css div.toolbar > button with index 0 does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F016",
+      "mutationId": "M04",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed css div.toolbar > button with index 0 now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F016",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so css div.toolbar > button with index 0 still matches only the original target."
+    },
+    {
+      "fixtureId": "F016",
+      "mutationId": "M06",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M06 moves the target into an open shadow root; the direct-child combinator in css div.toolbar > button with index 0 does not cross the shadow boundary, so it matches only the sibling buttons and the index picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F016",
+      "mutationId": "M07",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed css div.toolbar > button with index 0 now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F016",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; css div.toolbar > button with index 0 does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F017",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; XPath //button[@title='Make text bold'] still matches the same single node."
+    },
+    {
+      "fixtureId": "F017",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; XPath //button[@title='Make text bold'] keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F017",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; XPath //button[@title='Make text bold'] does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F017",
+      "mutationId": "M04",
+      "expectedVerdict": "STABLE",
+      "reason": "The M04 decoy copies tag/class/text/aria-label but not the attribute XPath //button[@title='Make text bold'] keys on, so the locator still matches only the original target."
+    },
+    {
+      "fixtureId": "F017",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so XPath //button[@title='Make text bold'] still matches only the original target."
+    },
+    {
+      "fixtureId": "F017",
+      "mutationId": "M06",
+      "expectedVerdict": "MISSING",
+      "reason": "M06 moves the target into an open shadow root; the XPath engine does not pierce shadow roots, so XPath //button[@title='Make text bold'] matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F017",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute XPath //button[@title='Make text bold'] keys on (and role locators exclude hidden nodes), so XPath //button[@title='Make text bold'] still matches only the original target."
+    },
+    {
+      "fixtureId": "F017",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; XPath //button[@title='Make text bold'] does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F018",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; role button name \"Bold\" (from text) still matches the same single node."
+    },
+    {
+      "fixtureId": "F018",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; role button name \"Bold\" (from text) keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F018",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; role button name \"Bold\" (from text) does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F018",
+      "mutationId": "M04",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M04 inserts a visible decoy with the same tag/class/text/name before the target, so role button name \"Bold\" (from text) now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F018",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so role button name \"Bold\" (from text) still matches only the original target."
+    },
+    {
+      "fixtureId": "F018",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so role button name \"Bold\" (from text) still finds the same node."
+    },
+    {
+      "fixtureId": "F018",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute role button name \"Bold\" (from text) keys on (and role locators exclude hidden nodes), so role button name \"Bold\" (from text) still matches only the original target."
+    },
+    {
+      "fixtureId": "F018",
+      "mutationId": "M08",
+      "expectedVerdict": "MISSING",
+      "reason": "M08 changes the target text; role button name \"Bold\" (from text) keys on the old text/accessible name, so it matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F019",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; css button[type=\"submit\"] in frame iframe.frame-a still matches the same single node."
+    },
+    {
+      "fixtureId": "F019",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; css button[type=\"submit\"] in frame iframe.frame-a keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F019",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; css button[type=\"submit\"] in frame iframe.frame-a does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F019",
+      "mutationId": "M04",
+      "expectedVerdict": "STABLE",
+      "reason": "The M04 decoy copies tag/class/text/aria-label but not the attribute css button[type=\"submit\"] in frame iframe.frame-a keys on, so the locator still matches only the original target."
+    },
+    {
+      "fixtureId": "F019",
+      "mutationId": "M05",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M05 appends a second iframe matching framePath[0], so frame resolution sees 2 frames, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F019",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so css button[type=\"submit\"] in frame iframe.frame-a still finds the same node."
+    },
+    {
+      "fixtureId": "F019",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute css button[type=\"submit\"] in frame iframe.frame-a keys on (and role locators exclude hidden nodes), so css button[type=\"submit\"] in frame iframe.frame-a still matches only the original target."
+    },
+    {
+      "fixtureId": "F019",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; css button[type=\"submit\"] in frame iframe.frame-a does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F020",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; XPath //button[text()='Save'] in frame iframe.frame-a still matches the same single node."
+    },
+    {
+      "fixtureId": "F020",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; XPath //button[text()='Save'] in frame iframe.frame-a keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F020",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; XPath //button[text()='Save'] in frame iframe.frame-a does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F020",
+      "mutationId": "M04",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M04 inserts a visible decoy with the same tag/class/text/name before the target, so XPath //button[text()='Save'] in frame iframe.frame-a now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F020",
+      "mutationId": "M05",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M05 appends a second iframe matching framePath[0], so frame resolution sees 2 frames, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F020",
+      "mutationId": "M06",
+      "expectedVerdict": "MISSING",
+      "reason": "M06 moves the target into an open shadow root; the XPath engine does not pierce shadow roots, so XPath //button[text()='Save'] in frame iframe.frame-a matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F020",
+      "mutationId": "M07",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M07 inserts a hidden duplicate with the same tag/class/text before the target; CSS/XPath count hidden nodes, so XPath //button[text()='Save'] in frame iframe.frame-a now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F020",
+      "mutationId": "M08",
+      "expectedVerdict": "MISSING",
+      "reason": "M08 changes the target text; XPath //button[text()='Save'] in frame iframe.frame-a keys on the old text/accessible name, so it matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F021",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; role button name \"Save\" (non-exact) with index 0 in nested frames still matches the same single node."
+    },
+    {
+      "fixtureId": "F021",
+      "mutationId": "M02",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed role button name \"Save\" (non-exact) with index 0 in nested frames now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F021",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; role button name \"Save\" (non-exact) with index 0 in nested frames does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F021",
+      "mutationId": "M04",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "A decoy or sibling moves ahead of the target, so the indexed role button name \"Save\" (non-exact) with index 0 in nested frames now picks a different node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F021",
+      "mutationId": "M05",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M05 appends a second iframe matching framePath[0], so frame resolution sees 2 frames, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F021",
+      "mutationId": "M06",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M06 moves the target into an open shadow root; the engine pierces it, but a light-DOM match is yielded before the shadow match, so the indexed role button name \"Save\" (non-exact) with index 0 in nested frames picks the wrong node, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F021",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute role button name \"Save\" (non-exact) with index 0 in nested frames keys on (and role locators exclude hidden nodes), so role button name \"Save\" (non-exact) with index 0 in nested frames still matches only the original target."
+    },
+    {
+      "fixtureId": "F021",
+      "mutationId": "M08",
+      "expectedVerdict": "WRONG_TARGET",
+      "reason": "M08 changes the target text so it no longer contains 'Save'; the sibling 'Save draft' still matches name 'Save', so the indexed role locator picks the sibling, WRONG_TARGET."
+    },
+    {
+      "fixtureId": "F022",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; css button.primary in open shadow root still matches the same single node."
+    },
+    {
+      "fixtureId": "F022",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; css button.primary in open shadow root keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F022",
+      "mutationId": "M03",
+      "expectedVerdict": "MISSING",
+      "reason": "M03 replaces the first class token that css button.primary in open shadow root keys on, so the locator no longer matches the target; final count 0, MISSING."
+    },
+    {
+      "fixtureId": "F022",
+      "mutationId": "M04",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M04 inserts a visible decoy with the same tag/class/text/name before the target, so css button.primary in open shadow root now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F022",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so css button.primary in open shadow root still matches only the original target."
+    },
+    {
+      "fixtureId": "F022",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so css button.primary in open shadow root still finds the same node."
+    },
+    {
+      "fixtureId": "F022",
+      "mutationId": "M07",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M07 inserts a hidden duplicate with the same tag/class/text before the target; CSS/XPath count hidden nodes, so css button.primary in open shadow root now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F022",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; css button.primary in open shadow root does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F023",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; XPath //button[@type='submit'] still matches the same single node."
+    },
+    {
+      "fixtureId": "F023",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; XPath //button[@type='submit'] keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F023",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; XPath //button[@type='submit'] does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F023",
+      "mutationId": "M04",
+      "expectedVerdict": "STABLE",
+      "reason": "The M04 decoy copies tag/class/text/aria-label but not the attribute XPath //button[@type='submit'] keys on, so the locator still matches only the original target."
+    },
+    {
+      "fixtureId": "F023",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so XPath //button[@type='submit'] still matches only the original target."
+    },
+    {
+      "fixtureId": "F023",
+      "mutationId": "M06",
+      "expectedVerdict": "MISSING",
+      "reason": "M06 moves the target into an open shadow root; the XPath engine does not pierce shadow roots, so XPath //button[@type='submit'] matches 0 nodes, MISSING."
+    },
+    {
+      "fixtureId": "F023",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute XPath //button[@type='submit'] keys on (and role locators exclude hidden nodes), so XPath //button[@type='submit'] still matches only the original target."
+    },
+    {
+      "fixtureId": "F023",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; XPath //button[@type='submit'] does not depend on the changed text, so the target still matches."
+    },
+    {
+      "fixtureId": "F024",
+      "mutationId": "M01",
+      "expectedVerdict": "STABLE",
+      "reason": "M01 wraps the target in a div; role button name \"Save document\" (aria-label) in open shadow root still matches the same single node."
+    },
+    {
+      "fixtureId": "F024",
+      "mutationId": "M02",
+      "expectedVerdict": "STABLE",
+      "reason": "M02 swaps the target with a sibling; role button name \"Save document\" (aria-label) in open shadow root keys on the target itself, so it still matches the same single node."
+    },
+    {
+      "fixtureId": "F024",
+      "mutationId": "M03",
+      "expectedVerdict": "STABLE",
+      "reason": "M03 replaces the target's first class token; role button name \"Save document\" (aria-label) in open shadow root does not use that token, so the target still matches."
+    },
+    {
+      "fixtureId": "F024",
+      "mutationId": "M04",
+      "expectedVerdict": "AMBIGUOUS",
+      "reason": "M04 inserts a visible decoy with the same tag/class/text/name before the target, so role button name \"Save document\" (aria-label) in open shadow root now matches 2 nodes, AMBIGUOUS."
+    },
+    {
+      "fixtureId": "F024",
+      "mutationId": "M05",
+      "expectedVerdict": "STABLE",
+      "reason": "M05 appends a srcdoc iframe decoy; locators do not descend into the new frame, so role button name \"Save document\" (aria-label) in open shadow root still matches only the original target."
+    },
+    {
+      "fixtureId": "F024",
+      "mutationId": "M06",
+      "expectedVerdict": "STABLE",
+      "reason": "M06 moves the target into an open shadow root; the CSS/role engine pierces open shadow roots, so role button name \"Save document\" (aria-label) in open shadow root still finds the same node."
+    },
+    {
+      "fixtureId": "F024",
+      "mutationId": "M07",
+      "expectedVerdict": "STABLE",
+      "reason": "The M07 hidden duplicate lacks the attribute role button name \"Save document\" (aria-label) in open shadow root keys on (and role locators exclude hidden nodes), so role button name \"Save document\" (aria-label) in open shadow root still matches only the original target."
+    },
+    {
+      "fixtureId": "F024",
+      "mutationId": "M08",
+      "expectedVerdict": "STABLE",
+      "reason": "M08 changes the target text only and leaves aria-label unchanged; role button name \"Save document\" (aria-label) in open shadow root does not depend on the changed text, so the target still matches."
+    }
+  ]
+}

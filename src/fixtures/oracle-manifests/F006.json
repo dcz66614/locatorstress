@@ -1,0 +1,16 @@
+{
+  "fixtureId": "F006",
+  "family": "search-box",
+  "kind": "role",
+  "controlGroup": "stable",
+  "locator": {
+    "kind": "role",
+    "role": "button",
+    "name": "Search site",
+    "exact": true
+  },
+  "privateTargetPath": "main > form.search > button:nth-child(2)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

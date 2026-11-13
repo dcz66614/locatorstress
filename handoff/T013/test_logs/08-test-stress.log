@@ -1,0 +1,22 @@
+
+> locatorstress@0.1.0 test:stress
+> npm run build && vitest run tests/e2e/stress.test.ts
+
+
+> locatorstress@0.1.0 build
+> tsc
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/home/hatch/workspace/p022-locatorstress[39m
+
+ [32m✓[39m tests/e2e/stress.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 6321[2mms[22m[39m
+   [32m✓[39m T012 stress (real Chromium) [2m(6)[22m
+     [33m[2m✓[22m[39m repeat determinism: F002 verdict vector identical across 5 runs[33m 1389[2mms[22m[39m
+     [33m[2m✓[22m[39m concurrency: 3 contexts x 3 fixtures in parallel, all verdicts match golden[33m 1940[2mms[22m[39m
+     [33m[2m✓[22m[39m UI server under parallel load: 3 concurrent analyzes match golden; repeats byte-identical[33m 2221[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 06:16:39
+[2m   Duration [22m 6.92s[2m (tests 94%, import 6%, transform 1%)[22m
+

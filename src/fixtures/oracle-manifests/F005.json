@@ -1,0 +1,14 @@
+{
+  "fixtureId": "F005",
+  "family": "search-box",
+  "kind": "xpath",
+  "controlGroup": "stable",
+  "locator": {
+    "kind": "xpath",
+    "selector": "//button[@type='submit']"
+  },
+  "privateTargetPath": "main > form.search > button:nth-child(2)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

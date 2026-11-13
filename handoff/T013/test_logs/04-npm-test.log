@@ -1,0 +1,99 @@
+
+> locatorstress@0.1.0 test
+> vitest run --no-file-parallelism
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/home/hatch/workspace/p022-locatorstress[39m
+
+ [32m✓[39m tests/score/controls.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 10777[2mms[22m[39m
+   [32m✓[39m T005 controls (live 192-case recomputation) [2m(2)[22m
+     [33m[2m✓[22m[39m 192 live cases: score module recomputes overall/per-locator/per-operator scores and both control metrics[33m 8545[2mms[22m[39m
+ [32m✓[39m tests/search/bfs.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 286[2mms[22m[39m
+ [32m✓[39m tests/property/property.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 120[2mms[22m[39m
+ [32m✓[39m tests/api/routes.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m tests/analysis/witness.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m tests/canonical/canonical-boundaries.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/canonical/canonical-json.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/score/stability-score.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m tests/contracts/locator-spec.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/verdict/classify.test.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/search/state-key-boundaries.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/score/format-percent-boundaries.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/canonical/forbidden-scan.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/verdict/classify-boundaries.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+[90mstdout[2m | tests/canonical/hash-contract.test.ts[2m > [22m[2mT006 evidence summary (values for T006_HASH_REPORT.json)[2m > [22m[2mlogs canonical byte lengths, the sample hash, and scan totals
+[22m[39mT006_EVIDENCE {"byteLengths":{"scenario":13502,"oracle":24318,"analysis":848,"gate":2012},"canonicalSha256":{"scenario":"1ffb5f85561c6dd9f10fc15773097691c5c07fe20c6e9a001e231a41b61c9f22","oracle":"3502d81fa730605dd85548e39af6b7272015c026e65f91a2dae132c3e345a988","analysis":"4410d5c85cf5fe8ee858c4e01822cdbc1515c39afa7ba40d833aceb00a9576a4","gate":"651c3fd4ec68bcc57404d03484e30d47e2c635c1d190be0892725fce06a62c52"},"sampleCanonical":"{\"a\":[\"𐀀\",\"\"],\"é\":\"café\",\"z\":{\"A\":2,\"b\":1}}","sampleSha256":"1abba10e4491429e85dcda6dae5a43fabc40810867d8f1f7d2f9f97b70c15cf3","forbiddenScanHits":{"scenario":0,"oracle":0,"analysis":0,"gate":0},"rulesRun":["created-at","wall-clock-iso","epoch-millis","uuid","cdp-object-id","cdp-dotted-id","pid","windows-absolute-path","absolute-path-literal","hostname-literal","username-in-path"]}
+
+ [32m✓[39m tests/canonical/hash-contract.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 209[2mms[22m[39m
+ [32m✓[39m tests/export/html-escape.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/e2e/performance.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 144813[2mms[22m[39m
+   [32m✓[39m T012 performance (real Chromium) [2m(4)[22m
+     [33m[2m✓[22m[39m 192-case matrix x3: all verdicts match golden, P95s recorded and within target[33m 19146[2mms[22m[39m
+     [33m[2m✓[22m[39m real-browser BFS at the 4096 cap (F001): space exhausts first (BOUNDED_NO_WITNESS), counts recorded[33m 124330[2mms[22m[39m
+ [32m✓[39m tests/integration/p2a-detach-regression.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 23006[2mms[22m[39m
+   [32m✓[39m P2-A detach regression [2m(2)[22m
+     [33m[2m✓[22m[39m detaching the target frame mid-oracle yields executionStatus ERROR[33m 21825[2mms[22m[39m
+ [32m✓[39m tests/integration/s0-mutations.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 8278[2mms[22m[39m
+   [32m✓[39m S0 mutations [2m(1)[22m
+     [33m[2m✓[22m[39m 192 single-mutation cases match the hand-derived golden matrix[33m 7372[2mms[22m[39m
+ [32m✓[39m tests/e2e/e2e-main-flow.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 12167[2mms[22m[39m
+   [32m✓[39m T012 E2E main flow (real Chromium) [2m(7)[22m
+     [33m[2m✓[22m[39m full flow F002: select -> validate/preview -> diff -> matrix -> witness -> report[33m 3302[2mms[22m[39m
+     [33m[2m✓[22m[39m downloaded UI JSON matches the frozen backend /api/analyze + /api/search field by field[33m 349[2mms[22m[39m
+     [33m[2m✓[22m[39m full flow F001: all-STABLE fixture scores 100 and exports 8 STABLE cases[33m 675[2mms[22m[39m
+     [33m[2m✓[22m[39m keyboard only: Tab/Enter select F003, ArrowRight tabs, Enter runs matrix + BFS + download[33m 3993[2mms[22m[39m
+     [33m[2m✓[22m[39m keyboard: ArrowLeft wraps back through tabs and Shift+Tab moves focus backwards[33m 1254[2mms[22m[39m
+     [33m[2m✓[22m[39m invalid locator draft is stopped client-side and the server stays alive[33m 308[2mms[22m[39m
+ [32m✓[39m tests/integration/oracle-parity-independent.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 8192[2mms[22m[39m
+   [32m✓[39m T011 independent Oracle parity (192 cases, three-way) [2m(2)[22m
+     [33m[2m✓[22m[39m production verdict == independent verdict == golden on all 192 cases, field by field[33m 7347[2mms[22m[39m
+ [32m✓[39m tests/verdict/verdict-golden.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 6981[2mms[22m[39m
+   [32m✓[39m T004 verdict golden (production classifyVerdict, 192 cases) [2m(3)[22m
+     [33m[2m✓[22m[39m 192 cases: classifyVerdict matches golden 192/192 and T002 report 192/192[33m 6353[2mms[22m[39m
+ [32m✓[39m tests/e2e/offline.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 6179[2mms[22m[39m
+   [32m✓[39m T012 offline (real Chromium) [2m(6)[22m
+     [33m[2m✓[22m[39m live UI session: goto + analyze makes zero external requests[33m 3290[2mms[22m[39m
+     [33m[2m✓[22m[39m exported HTML report opens offline over file:// with zero non-file requests[33m 790[2mms[22m[39m
+     [33m[2m✓[22m[39m hostile page: external img + fetch are intercepted and aborted, page keeps working[33m 880[2mms[22m[39m
+     [33m[2m✓[22m[39m API export boundary: HTML export via /api/export is 501 (local file only)[33m 862[2mms[22m[39m
+ [32m✓[39m tests/ui/ui-flow.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 6398[2mms[22m[39m
+   [32m✓[39m T009 UI end-to-end (real Chromium) [2m(12)[22m
+     [33m[2m✓[22m[39m loads the UI, shows health + 24 fixtures, and selects F002[33m 1049[2mms[22m[39m
+     [33m[2m✓[22m[39m matrix flow: analyze F002 shows backend verdicts (M01 WRONG_TARGET)[33m 1029[2mms[22m[39m
+     [33m[2m✓[22m[39m keyboard only: Tab to the Matrix tab, Tab to run-analysis, Enter runs it[33m 904[2mms[22m[39m
+     [33m[2m✓[22m[39m narrow viewport (390px) has no horizontal overflow[33m 671[2mms[22m[39m
+ [32m✓[39m tests/e2e/stress.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 6240[2mms[22m[39m
+   [32m✓[39m T012 stress (real Chromium) [2m(6)[22m
+     [33m[2m✓[22m[39m repeat determinism: F002 verdict vector identical across 5 runs[33m 1470[2mms[22m[39m
+     [33m[2m✓[22m[39m concurrency: 3 contexts x 3 fixtures in parallel, all verdicts match golden[33m 1696[2mms[22m[39m
+     [33m[2m✓[22m[39m UI server under parallel load: 3 concurrent analyzes match golden; repeats byte-identical[33m 2289[2mms[22m[39m
+ [32m✓[39m tests/search/bfs-browser.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 3200[2mms[22m[39m
+   [32m✓[39m T007 BFS on real fixtures [2m(1)[22m
+     [33m[2m✓[22m[39m depth-1 witnesses match the golden matrix (F002, F003) and F001 has none[33m 2603[2mms[22m[39m
+ [32m✓[39m tests/runner/resolver-boundaries.test.ts [2m([22m[2m27 tests[22m[2m)[22m[33m 2755[2mms[22m[39m
+ [32m✓[39m tests/oracle/oracle-capture.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 3137[2mms[22m[39m
+ [32m✓[39m tests/api/analyze-browser.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 1878[2mms[22m[39m
+   [32m✓[39m browser AnalysisService [2m(9)[22m
+     [33m[2m✓[22m[39m analyze F002: baseline STABLE and all 8 cases match golden[33m 493[2mms[22m[39m
+     [33m[2m✓[22m[39m analyze F001: all 8 single mutations STABLE per golden[33m 369[2mms[22m[39m
+ [32m✓[39m tests/integration/s0-fixtures.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2152[2mms[22m[39m
+   [32m✓[39m S0 fixtures [2m(3)[22m
+     [33m[2m✓[22m[39m baseline: 24/24 unique hit on the original target[33m 1502[2mms[22m[39m
+ [32m✓[39m tests/mutations/mutation-operators.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 1687[2mms[22m[39m
+ [32m✓[39m tests/export/html-safety.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1344[2mms[22m[39m
+   [32m✓[39m offline HTML report in a real browser [2m(3)[22m
+     [33m[2m✓[22m[39m opens offline with zero non-file requests, zero dialogs, zero executable scripts[33m 892[2mms[22m[39m
+ [32m✓[39m tests/api/validate-http.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 751[2mms[22m[39m
+ [32m✓[39m tests/api/server.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m tests/export/html-export.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m tests/api/routes-boundaries.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m tests/export/json-export.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m tests/search/bfs-determinism.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m tests/analysis/witness-boundaries.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+[2m      Tests [22m [1m[32m509 passed[39m[22m[90m (509)[39m
+[2m   Start at [22m 06:10:19
+[2m   Duration [22m 270.46s[2m (tests 96%, import 4%)[22m
+
+npm test exit=0

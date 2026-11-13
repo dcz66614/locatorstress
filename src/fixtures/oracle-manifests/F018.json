@@ -1,0 +1,16 @@
+{
+  "fixtureId": "F018",
+  "family": "toolbar-menu",
+  "kind": "role",
+  "controlGroup": "fragile",
+  "locator": {
+    "kind": "role",
+    "role": "button",
+    "name": "Bold",
+    "exact": true
+  },
+  "privateTargetPath": "main > div.toolbar > button:nth-child(1)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

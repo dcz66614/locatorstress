@@ -1,0 +1,16 @@
+{
+  "fixtureId": "F015",
+  "family": "table-row-action",
+  "kind": "role",
+  "controlGroup": "fragile",
+  "locator": {
+    "kind": "role",
+    "role": "button",
+    "name": "Edit",
+    "exact": true
+  },
+  "privateTargetPath": "main > table > tbody > tr:nth-child(2) > td:nth-child(2) > button:nth-child(1)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

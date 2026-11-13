@@ -1,0 +1,14 @@
+{
+  "fixtureId": "F013",
+  "family": "table-row-action",
+  "kind": "css",
+  "controlGroup": "stable",
+  "locator": {
+    "kind": "css",
+    "selector": "button[type=\"submit\"]"
+  },
+  "privateTargetPath": "main > table > tbody > tr:nth-child(2) > td:nth-child(2) > button:nth-child(1)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

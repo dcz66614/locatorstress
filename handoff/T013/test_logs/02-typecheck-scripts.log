@@ -1,0 +1,4 @@
+
+> locatorstress@0.1.0 typecheck:scripts
+> tsc -p tsconfig.scripts.json
+

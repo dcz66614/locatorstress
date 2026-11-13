@@ -1,0 +1,14 @@
+{
+  "fixtureId": "F017",
+  "family": "toolbar-menu",
+  "kind": "xpath",
+  "controlGroup": "stable",
+  "locator": {
+    "kind": "xpath",
+    "selector": "//button[@title='Make text bold']"
+  },
+  "privateTargetPath": "main > div.toolbar > button:nth-child(1)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "noEmit": true,
+    "rootDir": ".",
+    "types": []
+  },
+  "extends": "./tsconfig.json",
+  "include": [
+    "scripts"
+  ]
+}

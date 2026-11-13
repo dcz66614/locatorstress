@@ -1,0 +1,14 @@
+{
+  "fixtureId": "F011",
+  "family": "dialog-confirm",
+  "kind": "xpath",
+  "controlGroup": "fragile",
+  "locator": {
+    "kind": "xpath",
+    "selector": "//button[text()='Confirm']"
+  },
+  "privateTargetPath": "main > div.dialog > button:nth-child(2)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

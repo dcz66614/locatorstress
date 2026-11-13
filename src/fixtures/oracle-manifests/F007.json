@@ -1,0 +1,14 @@
+{
+  "fixtureId": "F007",
+  "family": "nav-link",
+  "kind": "css",
+  "controlGroup": "stable",
+  "locator": {
+    "kind": "css",
+    "selector": "a[href=\"/dashboard\"]"
+  },
+  "privateTargetPath": "main > nav > a:nth-child(2)",
+  "captureMode": "page",
+  "m03Token": "nav-link",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}

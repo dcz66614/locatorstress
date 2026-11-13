@@ -1,0 +1,14 @@
+{
+  "fixtureId": "F023",
+  "family": "open-shadow-dom",
+  "kind": "xpath",
+  "controlGroup": "stable",
+  "locator": {
+    "kind": "xpath",
+    "selector": "//button[@type='submit']"
+  },
+  "privateTargetPath": "main > button:nth-child(3)",
+  "captureMode": "page",
+  "m03Token": "primary",
+  "seed": "P022-LOCATORSTRESS-S0-2026-11-10"
+}
